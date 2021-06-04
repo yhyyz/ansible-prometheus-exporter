@@ -1,0 +1,50 @@
+#- hosts: all
+#  gather_facts: no
+#  vars_prompt:
+#    - name: "host"
+#      prompt: "please enter the target hostname from:  {{ groups }}"
+#      private: no
+#  tasks:
+#    - add_host:
+#        name: "{{ host }}"
+#        groups: chosen_host
+#- name: Ping Host
+#  hosts: all
+#  gather_facts: false
+##  remote_user: hadoop
+#  tags:
+#    - ping
+#  tasks:
+#  - name: Pinging Host
+#    ping:
+- name: Deploy node_exporter
+  hosts: all
+  roles:
+    - node_exporter
+  vars:
+    python_venv_execute: "/usr/local/venv/ape-venv/bin/python"
+    update_scrape_script: "{{ lookup('env', 'PWD') }}/update_scrape.py"
+    aws_region: "ap-southeast-1"
+    cluster_id: "j-PYPMRKA423GU"
+    ip_type: "PrivateIpAddress"
+    prometheus_sd_dir: "/etc/prometheus/file_sd"
+    node_exporter_version: 1.1.0
+  tags:
+    - node_exporter
+
+- name: Deploy jmx_exporter
+  hosts: all
+  vars:
+    jmx_exporter_version: 0.14.0
+    python_venv_execute: "/usr/local/venv/ape-venv/bin/python"
+    update_scrape_script: "{{ lookup('env', 'PWD') }}/update_scrape.py"
+    aws_region: "ap-southeast-1"
+    cluster_id: "j-PYPMRKA423GU"
+    ip_type: "PrivateIpAddress"
+    prometheus_sd_dir: "/etc/prometheus/file_sd"
+  roles:
+    - jmx_exporter
+  tags:
+    - jmx_exporter
+
+
