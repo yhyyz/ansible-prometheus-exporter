@@ -103,7 +103,7 @@
     path: /etc/hadoop/conf/yarn-env.sh
     marker: "#{mark} ANSIBLE MANAGED BLOCK NODEMANAGER"
     block: |
-      export YARN_NODEMANAGER_OPTS="${YARN_NODEMANAGER_OPTS} -javaagent:{{ _jmx_exporter_jar_install_dir }}/{{ jmx_exporter_signature }}={{jmx_nm_prometheus_port}}:/etc/jvm_exporter/yarn_nm_jmx_config.yaml"
+      export YARN_NODEMANAGER_OPTS=" -javaagent:{{ _jmx_exporter_jar_install_dir }}/{{ jmx_exporter_signature }}={{jmx_nm_prometheus_port}}:/etc/jvm_exporter/yarn_nm_jmx_config.yaml"
   notify:
     - restart nodemanager
     - tag nm instance
