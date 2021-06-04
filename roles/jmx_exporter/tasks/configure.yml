@@ -68,7 +68,6 @@
       export HDFS_NAMENODE_OPTS="${HDFS_NAMENODE_OPTS} -javaagent:{{ _jmx_exporter_jar_install_dir }}/{{ jmx_exporter_signature }}={{jmx_nn_prometheus_port}}:/etc/jvm_exporter/hdfs_nn_jmx_config.yaml"
   notify:
     - restart namenode
-    - tag instance
     - tag nn instance
 #  changed_when: true
   when: "'skipped' not in nn_jmx_conf"
@@ -81,7 +80,6 @@
       export HDFS_DATANODE_OPTS="${HDFS_DATANODE_OPTS} -javaagent:{{ _jmx_exporter_jar_install_dir }}/{{ jmx_exporter_signature }}={{jmx_dn_prometheus_port}}:/etc/jvm_exporter/hdfs_dn_jmx_config.yaml"
   notify:
     - restart datanode
-    - tag instance
     - tag dn instance
 #  changed_when: true
   when: "'skipped' not in dn_jmx_conf"
