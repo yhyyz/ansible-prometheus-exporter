@@ -77,7 +77,7 @@
     path: /etc/hadoop/conf/hadoop-env.sh
     marker: "#{mark} ANSIBLE MANAGED BLOCK DATANODE"
     block: |
-      export HDFS_DATANODE_OPTS="${HDFS_DATANODE_OPTS} -javaagent:{{ _jmx_exporter_jar_install_dir }}/{{ jmx_exporter_signature }}={{jmx_dn_prometheus_port}}:/etc/jvm_exporter/hdfs_dn_jmx_config.yaml"
+      export HADOOP_DATANODE_OPTS="${HADOOP_DATANODE_OPTS} -javaagent:{{ _jmx_exporter_jar_install_dir }}/{{ jmx_exporter_signature }}={{jmx_dn_prometheus_port}}:/etc/jvm_exporter/hdfs_dn_jmx_config.yaml"
   notify:
     - restart datanode
     - tag dn instance
