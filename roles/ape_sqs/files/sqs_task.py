@@ -38,7 +38,7 @@ def is_resize_complete(event):
     if (event['detail-type'] == "EMR Instance Group State Change"
         or event['detail-type'] == "EMR Instance Fleet State Change") \
             and "is complete" in event['detail']["message"] \
-            and event['detail']["state"] == "RUNNING":
+            and (event['detail']["state"] == "RUNNING" or event['detail']["state"] == "RESIZING"):
         return True
     else:
         return False
