@@ -1,8 +1,8 @@
 ---
 - block:
-    - name: Create jvm_exporter config directory
+    - name: Create jmx_exporter config directory
       file:
-        path: "/etc/jvm_exporter"
+        path: "/etc/jmx_exporter"
         state: directory
         owner: root
         group: root
@@ -22,7 +22,7 @@
     - name: Copy the namenode jmx config file
       template:
         src: hdfs_nn_jmx_config.yaml.j2
-        dest: /etc/jvm_exporter/hdfs_nn_jmx_config.yaml
+        dest: /etc/jmx_exporter/hdfs_nn_jmx_config.yaml
         owner: root
         group: root
         mode: 0644
@@ -33,7 +33,7 @@
     - name: Copy the datanode jmx config file
       template:
         src: hdfs_dn_jmx_config.yaml.j2
-        dest: /etc/jvm_exporter/hdfs_dn_jmx_config.yaml
+        dest: /etc/jmx_exporter/hdfs_dn_jmx_config.yaml
         owner: root
         group: root
         mode: 0644
@@ -43,7 +43,7 @@
     - name: Copy the resourcemanager jmx config file
       template:
         src: yarn_rm_jmx_config.yaml.j2
-        dest: /etc/jvm_exporter/yarn_rm_jmx_config.yaml
+        dest: /etc/jmx_exporter/yarn_rm_jmx_config.yaml
         owner: root
         group: root
         mode: 0644
@@ -53,7 +53,7 @@
     - name: Copy the nodemanager jmx config file
       template:
         src: yarn_nm_jmx_config.yaml.j2
-        dest: /etc/jvm_exporter/yarn_nm_jmx_config.yaml
+        dest: /etc/jmx_exporter/yarn_nm_jmx_config.yaml
         owner: root
         group: root
         mode: 0644
@@ -65,7 +65,7 @@
     path: /etc/hadoop/conf/hadoop-env.sh
     marker: "#{mark} ANSIBLE MANAGED BLOCK NAMENODE"
     block: |
-      export HDFS_NAMENODE_OPTS="${HDFS_NAMENODE_OPTS} -javaagent:{{ _jmx_exporter_jar_install_dir }}/{{ jmx_exporter_signature }}={{jmx_nn_prometheus_port}}:/etc/jvm_exporter/hdfs_nn_jmx_config.yaml"
+      export HDFS_NAMENODE_OPTS="${HDFS_NAMENODE_OPTS} -javaagent:{{ _jmx_exporter_jar_install_dir }}/{{ jmx_exporter_signature }}={{jmx_nn_prometheus_port}}:/etc/jmx_exporter/hdfs_nn_jmx_config.yaml"
   notify:
     - restart namenode
     - tag nn instance
@@ -77,7 +77,7 @@
     path: /etc/hadoop/conf/hadoop-env.sh
     marker: "#{mark} ANSIBLE MANAGED BLOCK DATANODE"
     block: |
-      export HADOOP_DATANODE_OPTS="${HADOOP_DATANODE_OPTS} -javaagent:{{ _jmx_exporter_jar_install_dir }}/{{ jmx_exporter_signature }}={{jmx_dn_prometheus_port}}:/etc/jvm_exporter/hdfs_dn_jmx_config.yaml"
+      export HADOOP_DATANODE_OPTS="${HADOOP_DATANODE_OPTS} -javaagent:{{ _jmx_exporter_jar_install_dir }}/{{ jmx_exporter_signature }}={{jmx_dn_prometheus_port}}:/etc/jmx_exporter/hdfs_dn_jmx_config.yaml"
   notify:
     - restart datanode
     - tag dn instance
@@ -89,7 +89,7 @@
     path: /etc/hadoop/conf/yarn-env.sh
     marker: "#{mark} ANSIBLE MANAGED BLOCK REOSURCEMANAGER"
     block: |
-      export YARN_RESOURCEMANAGER_OPTS="${YARN_RESOURCEMANAGER_OPTS} -javaagent:{{ _jmx_exporter_jar_install_dir }}/{{ jmx_exporter_signature }}={{jmx_rm_prometheus_port}}:/etc/jvm_exporter/yarn_rm_jmx_config.yaml"
+      export YARN_RESOURCEMANAGER_OPTS="${YARN_RESOURCEMANAGER_OPTS} -javaagent:{{ _jmx_exporter_jar_install_dir }}/{{ jmx_exporter_signature }}={{jmx_rm_prometheus_port}}:/etc/jmx_exporter/yarn_rm_jmx_config.yaml"
   notify:
     - restart resourcemanager
     - tag rm instance
@@ -101,7 +101,7 @@
     path: /etc/hadoop/conf/yarn-env.sh
     marker: "#{mark} ANSIBLE MANAGED BLOCK NODEMANAGER"
     block: |
-      export YARN_NODEMANAGER_OPTS=" -javaagent:{{ _jmx_exporter_jar_install_dir }}/{{ jmx_exporter_signature }}={{jmx_nm_prometheus_port}}:/etc/jvm_exporter/yarn_nm_jmx_config.yaml"
+      export YARN_NODEMANAGER_OPTS=" -javaagent:{{ _jmx_exporter_jar_install_dir }}/{{ jmx_exporter_signature }}={{jmx_nm_prometheus_port}}:/etc/jmx_exporter/yarn_nm_jmx_config.yaml"
   notify:
     - restart nodemanager
     - tag nm instance
