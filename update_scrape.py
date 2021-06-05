@@ -45,30 +45,30 @@ def gen_node_jmx_sd(ip_type,cluster_id):
         node_file_sd = format_sd(node_sd_metric,"node_exporter")
         sd_list.append(node_file_sd)
 
-    jmx_nn_sd = gen_exporter_instance_sd("jmx_exporter","nn",ip_type, cluster_id)
+    jmx_nn_sd = gen_exporter_instance_sd("jmx_exporter_nn","installed",ip_type, cluster_id)
     if len(jmx_nn_sd)>0:
         jmx_nn_metric = [x + ":7005" for x in jmx_nn_sd]
-        nn_file_sd = format_sd(jmx_nn_metric,"jmx_nn_exporter")
+        nn_file_sd = format_sd(jmx_nn_metric,"jmx_exporter_nn")
         sd_list.append(nn_file_sd)
 
 
-    jmx_dn_sd = gen_exporter_instance_sd("jmx_exporter", "dn", ip_type, cluster_id)
+    jmx_dn_sd = gen_exporter_instance_sd("jmx_exporter_dn", "installed", ip_type, cluster_id)
     if len(jmx_dn_sd) >0:
         jmx_dn_metric = [x + ":7006" for x in jmx_dn_sd]
-        dn_file_sd = format_sd(jmx_dn_metric, "jmx_dn_exporter")
+        dn_file_sd = format_sd(jmx_dn_metric, "jmx_exporter_dn")
         sd_list.append(dn_file_sd)
 
 
-    jmx_rn_sd = gen_exporter_instance_sd("jmx_exporter", "rn", ip_type, cluster_id)
+    jmx_rn_sd = gen_exporter_instance_sd("jmx_exporter_rn", "installed", ip_type, cluster_id)
     if len(jmx_rn_sd) > 0:
         jmx_rn_metric = [x + ":7007" for x in jmx_rn_sd]
-        rn_file_sd = format_sd(jmx_rn_metric, "jmx_rn_exporter")
+        rn_file_sd = format_sd(jmx_rn_metric, "jmx_exporter_rn")
         sd_list.append(rn_file_sd)
 
-    jmx_nm_sd = gen_exporter_instance_sd("jmx_exporter", "nm", ip_type, cluster_id)
+    jmx_nm_sd = gen_exporter_instance_sd("jmx_exporter_nm", "installed", ip_type, cluster_id)
     if len(jmx_nm_sd) > 0:
         jmx_nm_metric = [x + ":7008" for x in jmx_nm_sd]
-        nm_file_sd = format_sd(jmx_nm_metric, "jmx_nm_exporter")
+        nm_file_sd = format_sd(jmx_nm_metric, "jmx_exporter_nm")
         sd_list.append(nm_file_sd)
     return sd_list
 

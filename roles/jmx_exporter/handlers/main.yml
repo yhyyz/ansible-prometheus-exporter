@@ -38,7 +38,7 @@
      EC2_INSTANCE_ID=`wget -q -O - http://169.254.169.254/latest/meta-data/instance-id`
      EC2_AVAIL_ZONE=`wget -q -O - http://169.254.169.254/latest/meta-data/placement/availability-zone`
      EC2_REGION="`echo \"$EC2_AVAIL_ZONE\" | sed -e 's:\([0-9][0-9]*\)[a-z]*\$:\\1:'`"
-     /usr/bin/aws ec2 create-tags --region $EC2_REGION --resources $EC2_INSTANCE_ID --tags Key=jmx_exporter,Value=nn
+     /usr/bin/aws ec2 create-tags --region $EC2_REGION --resources $EC2_INSTANCE_ID --tags Key=jmx_exporter_nn,Value=installed
   when:
     - not ansible_check_mode
 
@@ -48,7 +48,7 @@
      EC2_INSTANCE_ID=`wget -q -O - http://169.254.169.254/latest/meta-data/instance-id`
      EC2_AVAIL_ZONE=`wget -q -O - http://169.254.169.254/latest/meta-data/placement/availability-zone`
      EC2_REGION="`echo \"$EC2_AVAIL_ZONE\" | sed -e 's:\([0-9][0-9]*\)[a-z]*\$:\\1:'`"
-     /usr/bin/aws ec2 create-tags --region $EC2_REGION --resources $EC2_INSTANCE_ID --tags Key=jmx_exporter,Value=dn
+     /usr/bin/aws ec2 create-tags --region $EC2_REGION --resources $EC2_INSTANCE_ID --tags Key=jmx_exporter_dn,Value=installed
   when:
     - not ansible_check_mode
 
@@ -58,7 +58,7 @@
      EC2_INSTANCE_ID=`wget -q -O - http://169.254.169.254/latest/meta-data/instance-id`
      EC2_AVAIL_ZONE=`wget -q -O - http://169.254.169.254/latest/meta-data/placement/availability-zone`
      EC2_REGION="`echo \"$EC2_AVAIL_ZONE\" | sed -e 's:\([0-9][0-9]*\)[a-z]*\$:\\1:'`"
-     /usr/bin/aws ec2 create-tags --region $EC2_REGION --resources $EC2_INSTANCE_ID --tags Key=jmx_exporter,Value=rn
+     /usr/bin/aws ec2 create-tags --region $EC2_REGION --resources $EC2_INSTANCE_ID --tags Key=jmx_exporter_rn,Value=installed
   when:
     - not ansible_check_mode
 
@@ -68,7 +68,7 @@
      EC2_INSTANCE_ID=`wget -q -O - http://169.254.169.254/latest/meta-data/instance-id`
      EC2_AVAIL_ZONE=`wget -q -O - http://169.254.169.254/latest/meta-data/placement/availability-zone`
      EC2_REGION="`echo \"$EC2_AVAIL_ZONE\" | sed -e 's:\([0-9][0-9]*\)[a-z]*\$:\\1:'`"
-     /usr/bin/aws ec2 create-tags --region $EC2_REGION --resources $EC2_INSTANCE_ID --tags Key=jmx_exporter,Value=nm
+     /usr/bin/aws ec2 create-tags --region $EC2_REGION --resources $EC2_INSTANCE_ID --tags Key=jmx_exporter_nm,Value=installed
   when:
     - not ansible_check_mode
 
