@@ -24,9 +24,10 @@ keyed_groups:
 # hostnames
 hostnames:
   - tag:Name
+  - private-ip-address
   - ip-address
   - dns-name
-  - private-ip-address
+
 
 # set var
 compose:
