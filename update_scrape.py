@@ -70,7 +70,7 @@ def gen_node_jmx_sd(ip_type,cluster_id):
         jmx_nm_metric = [x + ":7008" for x in jmx_nm_sd]
         nm_file_sd = format_sd(jmx_nm_metric, "jmx_nm_exporter")
         sd_list.append(nm_file_sd)
-    return json.dumps(sd_list)
+    return sd_list
 
 
 def write_sd_file(prometheus_sd_dir,cluster_id,sd_str):
@@ -86,8 +86,10 @@ if __name__ == '__main__':
     ip_type = sys.argv[3]
     prometheus_sd_dir = sys.argv[4]
 
-    sd_str = gen_node_jmx_sd(ip_type, cluster_id)
-    write_sd_file(prometheus_sd_dir,cluster_id,sd_str)
+    sd_list = gen_node_jmx_sd(ip_type, cluster_id)
+    if len(sd_list) > 0:
+        sd_str = json.dumps(sd_list)
+        write_sd_file(prometheus_sd_dir,cluster_id,sd_str)
 
 
 
