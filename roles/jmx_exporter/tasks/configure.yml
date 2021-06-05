@@ -89,7 +89,7 @@
     path: /etc/hadoop/conf/yarn-env.sh
     marker: "#{mark} ANSIBLE MANAGED BLOCK REOSURCEMANAGER"
     block: |
-      export YARN_RESOURCEMANAGER_OPTS="${YARN_RESOURCEMANAGER_OPTS} -javaagent:{{ _jmx_exporter_jar_install_dir }}/{{ jmx_exporter_signature }}={{jmx_rm_prometheus_port}}:/etc/jmx_exporter/yarn_rm_jmx_config.yaml"
+      export YARN_RESOURCEMANAGER_OPTS=" -javaagent:{{ _jmx_exporter_jar_install_dir }}/{{ jmx_exporter_signature }}={{jmx_rm_prometheus_port}}:/etc/jmx_exporter/yarn_rm_jmx_config.yaml"
   notify:
     - restart resourcemanager
     - tag rm instance
