@@ -22,7 +22,7 @@
     {
       "cacheTimeout": null,
       "columns": [],
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "fontSize": "100%",
       "gridPos": {
         "h": 6,
@@ -116,7 +116,7 @@
     {
       "cacheTimeout": null,
       "columns": [],
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "fontSize": "100%",
       "gridPos": {
         "h": 6,
@@ -213,7 +213,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -316,7 +316,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -409,7 +409,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -506,7 +506,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -600,7 +600,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -694,7 +694,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -786,7 +786,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -878,7 +878,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -970,7 +970,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -1080,7 +1080,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -1176,7 +1176,7 @@
   "tags": [
     "Amazon EMR",
     "JVM",
-    "Prometheus"
+    "prometheus-ape"
   ],
   "templating": {
     "list": [
@@ -1260,7 +1260,7 @@
           "text": "hadoop_hdfs_datanode",
           "value": "hadoop_hdfs_datanode"
         },
-        "datasource": "Prometheus",
+        "datasource": "prometheus-ape",
         "definition": "label_values(java_lang_memory_heapmemoryusage_used, job)",
         "hide": 0,
         "includeAll": false,
@@ -1286,7 +1286,7 @@
           "text": "j-IL8MLGKV6TBR",
           "value": "j-IL8MLGKV6TBR"
         },
-        "datasource": "Prometheus",
+        "datasource": "prometheus-ape",
         "definition": "label_values(java_lang_memory_heapmemoryusage_used{job=~\"$job\"}, cluster_id)",
         "hide": 0,
         "includeAll": true,
@@ -1313,7 +1313,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": "Prometheus",
+        "datasource": "prometheus-ape",
         "definition": "label_values(java_lang_memory_heapmemoryusage_used{job=~\"$job\", cluster_id=~'$cluster'}, instance)",
         "hide": 0,
         "includeAll": true,

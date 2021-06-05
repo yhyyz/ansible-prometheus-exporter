@@ -14,8 +14,8 @@
     },
     {
       "type": "datasource",
-      "id": "prometheus",
-      "name": "Prometheus",
+      "id": "prometheus-ape",
+      "name": "prometheus-ape",
       "version": "1.0.0"
     },
     {
@@ -48,7 +48,7 @@
   "panels": [
     {
       "collapsed": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -69,7 +69,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#299c46"
       ],
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": null,
       "format": "short",
       "gauge": {
@@ -152,7 +152,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#299c46"
       ],
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": null,
       "format": "short",
       "gauge": {
@@ -232,7 +232,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -325,7 +325,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -421,7 +421,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#299c46"
       ],
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "format": "decmbytes",
       "gauge": {
         "maxValue": 100,
@@ -504,7 +504,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#299c46"
       ],
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "format": "none",
       "gauge": {
         "maxValue": 100,
@@ -584,7 +584,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -677,7 +677,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -770,7 +770,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -859,7 +859,7 @@
     },
     {
       "collapsed": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -880,7 +880,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#299c46"
       ],
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": null,
       "format": "short",
       "gauge": {
@@ -962,7 +962,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 0,
       "fillGradient": 0,
@@ -1088,7 +1088,7 @@
     },
     {
       "collapsed": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -1106,7 +1106,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -1199,7 +1199,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -1292,7 +1292,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -1385,7 +1385,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -1478,7 +1478,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -1571,7 +1571,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -1664,7 +1664,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -1768,7 +1768,7 @@
     },
     {
       "collapsed": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -1786,7 +1786,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -1880,7 +1880,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -1973,7 +1973,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -2062,7 +2062,7 @@
     },
     {
       "collapsed": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -2083,7 +2083,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#299c46"
       ],
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "format": "none",
       "gauge": {
         "maxValue": 100,
@@ -2164,7 +2164,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -2257,7 +2257,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -2350,7 +2350,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -2443,7 +2443,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -2532,7 +2532,7 @@
     },
     {
       "collapsed": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -2553,7 +2553,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#299c46"
       ],
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "format": "decmbytes",
       "gauge": {
         "maxValue": 100,
@@ -2634,7 +2634,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -2728,7 +2728,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -2822,7 +2822,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -2915,7 +2915,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -3008,7 +3008,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -3097,7 +3097,7 @@
     },
     {
       "collapsed": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -3118,7 +3118,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#299c46"
       ],
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "format": "decmbytes",
       "gauge": {
         "maxValue": 100,
@@ -3199,7 +3199,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -3292,7 +3292,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -3388,7 +3388,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#299c46"
       ],
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": null,
       "format": "short",
       "gauge": {
@@ -3470,7 +3470,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -3563,7 +3563,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -3656,7 +3656,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -3749,7 +3749,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -3842,7 +3842,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -3935,7 +3935,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -4028,7 +4028,7 @@
   "tags": [
     "Amazon EMR",
     "YARN",
-    "Prometheus"
+    "prometheus-ape"
   ],
   "templating": {
     "list": [
@@ -4109,7 +4109,7 @@
       {
         "allValue": null,
         "current": {},
-        "datasource": "Prometheus",
+        "datasource": "prometheus-ape",
         "definition": "label_values(yarn_resourcemanager_queue_apps_running, job)",
         "hide": 0,
         "includeAll": false,
@@ -4132,7 +4132,7 @@
       {
         "allValue": null,
         "current": {},
-        "datasource": "Prometheus",
+        "datasource": "prometheus-ape",
         "definition": "label_values(yarn_resourcemanager_queue_apps_running{job=~\"$job\"}, cluster_id)",
         "hide": 0,
         "includeAll": true,
@@ -4155,7 +4155,7 @@
       {
         "allValue": null,
         "current": {},
-        "datasource": "Prometheus",
+        "datasource": "prometheus-ape",
         "definition": "label_values(yarn_resourcemanager_queue_apps_running{job=~\"$job\", cluster_id=~'$cluster'}, instance)",
         "hide": 0,
         "includeAll": true,

@@ -27,7 +27,7 @@
       admin_user: admin
       admin_password: admin
     grafana_datasources:
-      - name: prometheus
+      - name: prometheus-ape
         type: prometheus
         access: proxy
         url: 'http://localhost:9090'

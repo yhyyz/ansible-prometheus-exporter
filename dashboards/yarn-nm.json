@@ -14,8 +14,8 @@
     },
     {
       "type": "datasource",
-      "id": "prometheus",
-      "name": "Prometheus",
+      "id": "prometheus-ape",
+      "name": "prometheus-ape",
       "version": "1.0.0"
     }
   ],
@@ -42,7 +42,7 @@
   "panels": [
     {
       "collapsed": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -60,7 +60,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -153,7 +153,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -246,7 +246,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -339,7 +339,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -432,7 +432,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -525,7 +525,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -618,7 +618,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -711,7 +711,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -800,7 +800,7 @@
     },
     {
       "collapsed": true,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -815,7 +815,7 @@
           "cacheTimeout": null,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": "prometheus-ape",
           "decimals": 1,
           "fill": 1,
           "fillGradient": 0,
@@ -908,7 +908,7 @@
           "cacheTimeout": null,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": "prometheus-ape",
           "decimals": 1,
           "fill": 1,
           "fillGradient": 0,
@@ -1001,7 +1001,7 @@
     },
     {
       "collapsed": true,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -1016,7 +1016,7 @@
           "cacheTimeout": null,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": "prometheus-ape",
           "decimals": 1,
           "fill": 1,
           "fillGradient": 0,
@@ -1109,7 +1109,7 @@
           "cacheTimeout": null,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": "prometheus-ape",
           "decimals": 1,
           "fill": 1,
           "fillGradient": 0,
@@ -1202,7 +1202,7 @@
           "cacheTimeout": null,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": "prometheus-ape",
           "decimals": 1,
           "fill": 1,
           "fillGradient": 0,
@@ -1299,7 +1299,7 @@
   "tags": [
     "Amazon EMR",
     "YARN",
-    "Prometheus"
+    "prometheus-ape"
   ],
   "templating": {
     "list": [
@@ -1380,7 +1380,7 @@
       {
         "allValue": null,
         "current": {},
-        "datasource": "Prometheus",
+        "datasource": "prometheus-ape",
         "definition": "label_values(yarn_nodemanager_metrics_available_vcores, job)",
         "hide": 0,
         "includeAll": false,
@@ -1403,7 +1403,7 @@
       {
         "allValue": null,
         "current": {},
-        "datasource": "Prometheus",
+        "datasource": "prometheus-ape",
         "definition": "label_values(yarn_nodemanager_metrics_available_vcores{job=~\"$job\"}, cluster_id)",
         "hide": 0,
         "includeAll": true,
@@ -1426,7 +1426,7 @@
       {
         "allValue": null,
         "current": {},
-        "datasource": "Prometheus",
+        "datasource": "prometheus-ape",
         "definition": "label_values(yarn_nodemanager_metrics_available_vcores{job=~\"$job\", cluster_id=~'$cluster'}, instance)",
         "hide": 0,
         "includeAll": true,

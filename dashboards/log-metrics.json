@@ -24,7 +24,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -113,7 +113,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -202,7 +202,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "prometheus-ape",
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -292,7 +292,7 @@
   "tags": [
     "Amazon EMR",
     "Logs",
-    "Prometheus"
+    "prometheus-ape"
   ],
   "templating": {
     "list": [
@@ -377,7 +377,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": "Prometheus",
+        "datasource": "prometheus-ape",
         "definition": "label_values(log_fatal, role)",
         "hide": 0,
         "includeAll": true,
@@ -404,7 +404,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": "Prometheus",
+        "datasource": "prometheus-ape",
         "definition": "label_values(log_fatal {role=~\"$role\"}, job)",
         "hide": 0,
         "includeAll": true,
@@ -430,7 +430,7 @@
           "text": "j-IL8MLGKV6TBR",
           "value": "j-IL8MLGKV6TBR"
         },
-        "datasource": "Prometheus",
+        "datasource": "prometheus-ape",
         "definition": "label_values(log_fatal {role=~\"$role\", job=~\"$job\"},  cluster_id)",
         "hide": 0,
         "includeAll": true,
@@ -457,7 +457,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": "Prometheus",
+        "datasource": "prometheus-ape",
         "definition": "label_values(log_fatal {role=~\"$role\", job=~\"$job\", cluster_id=\"$cluster\"}, instance)",
         "hide": 0,
         "includeAll": true,
