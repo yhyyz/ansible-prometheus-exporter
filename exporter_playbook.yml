@@ -28,14 +28,14 @@
     cluster_id: "j-PYPMRKA423GU"
     ip_type: "PrivateIpAddress"
     prometheus_sd_dir: "/etc/prometheus/file_sd"
-    node_exporter_version: 1.1.0
+    node_exporter_version: 1.1.1
   tags:
     - node_exporter
 
 - name: Deploy jmx_exporter
   hosts: all
   vars:
-    jmx_exporter_version: 0.14.0
+    jmx_exporter_version: 0.15.0
     python_venv_execute: "/usr/local/venv/ape-venv/bin/python"
     update_scrape_script: "{{ lookup('env', 'PWD') }}/update_scrape.py"
     aws_region: "ap-southeast-1"
