@@ -102,7 +102,7 @@ def filter_instance(emr_instances):
     for tag in ec2_response["Tags"]:
         if tag["Key"] == "node_exporter" or tag["Key"] == "jmx_exporter_nn" \
                 or tag["Key"] == "jmx_exporter_dn" \
-                or tag["Key"] == "jmx_exporter_rn" \
+                or tag["Key"] == "jmx_exporter_rm" \
                 or tag["Key"] == "jmx_exporter_nm":
             ec2_id = tag["ResourceId"]
             ins_dict[ec2_id]=""

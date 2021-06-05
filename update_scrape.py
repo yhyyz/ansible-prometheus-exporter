@@ -59,10 +59,10 @@ def gen_node_jmx_sd(ip_type,cluster_id):
         sd_list.append(dn_file_sd)
 
 
-    jmx_rn_sd = gen_exporter_instance_sd("jmx_exporter_rn", "installed", ip_type, cluster_id)
-    if len(jmx_rn_sd) > 0:
-        jmx_rn_metric = [x + ":7007" for x in jmx_rn_sd]
-        rn_file_sd = format_sd(jmx_rn_metric, "jmx_exporter_rn")
+    jmx_rm_sd = gen_exporter_instance_sd("jmx_exporter_rm", "installed", ip_type, cluster_id)
+    if len(jmx_rm_sd) > 0:
+        jmx_rn_metric = [x + ":7007" for x in jmx_rm_sd]
+        rn_file_sd = format_sd(jmx_rn_metric, "jmx_exporter_rm")
         sd_list.append(rn_file_sd)
 
     jmx_nm_sd = gen_exporter_instance_sd("jmx_exporter_nm", "installed", ip_type, cluster_id)
