@@ -85,7 +85,8 @@ if __name__ == '__main__':
     cluster_id = sys.argv[2]
     ip_type = sys.argv[3]
     prometheus_sd_dir = sys.argv[4]
-
+    # sleep 3s ,get jmx tag as much as possible
+    time.sleep(3)
     sd_list = gen_node_jmx_sd(ip_type, cluster_id)
     if len(sd_list) > 0:
         sd_str = json.dumps(sd_list)
