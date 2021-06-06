@@ -19,7 +19,7 @@ def event_handler(event,exec_exporter_user,private_key_file):
                 return True
             hosts = ",".join(untaged_ins)+","
             print("untaged host: {0}".format(hosts))
-            cli = PlaybookCLI([" ", '-i', hosts, '-u', exec_exporter_user, '--private-key', private_key_file, "exporter_playbook.yml"])
+            cli = PlaybookCLI([" ", '-i', hosts, '-u', exec_exporter_user, '--private-key', private_key_file, "--extra-vars", "cluster_id="+cluster_id, "exporter_playbook.yml"])
             results = cli.run()
             if results == 0:
                 is_ok = True
