@@ -35,7 +35,7 @@
     grafana_dashboards:
       - dashboard_id: 1860
         revision_id: 23
-        datasource: prometheus
+        datasource: prometheus-ape
     grafana_dashboards_dir: "{{ lookup('env', 'PWD') }}/dashboards"
 
   tags:
