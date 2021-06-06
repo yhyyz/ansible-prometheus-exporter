@@ -6,7 +6,7 @@
 
 #### 一、背景
 
-`给客户的文档一般都是将当前文档转换为PDF交给客户，因此这里的文档更新,可能不会及时同步到客户，客户可以在这里看到最新文档说明`
+`给客户的文档一般都是将当前文档转换为PDF交给客户，因此这里的文档更新,可能不会及时同步到客户，客户可以在这里看到最新文档说明, 客户部署时按照这里文档说明部署即可`
 
 ##### 1.1 基本说明
 
@@ -176,7 +176,7 @@ jmx_exporter  根据你的Metrics需求在Grafana上配置即可
 
 对于Resize实例的expoter安装，是通过EMR的CloudWatchEvent触发Lamaba， Lambda中将集群的状态改变的Event发到SQS即可。 这个配置很简单，只把步骤列在下面，不做过多说明了，同时Lamada的代码放到下面
 
-1. 创建一个SQS，用来接收Lambad发送的EMR Event， SQS的Queue选择`FIFO`，名字就写你在2.4小结中配置的名字
+1. 创建一个SQS，用来接收Lambad发送的EMR Event， SQS的Queue选择`FIFO`，注意开启ContentBasedDeduplication，名字就写你在2.4小结中配置的名字
 
 2. 创建一个lambda函数，函数内容如下
 
@@ -187,8 +187,9 @@ jmx_exporter  根据你的Metrics需求在Grafana上配置即可
    def lambda_handler(event, context):
        json_str = json.dumps(event)
        sqs = boto3.resource('sqs')
-       queue = sqs.get_queue_by_name(QueueName='emr-state-queue')
-       response = queue.send_message(MessageBody=json_str)
+       queue = sqs.get_queue_by_name(QueueName='emr-state-queue.fifo')
+       # MessageGroupId only to FIFO
+       response = queue.send_message(MessageBody=json_str,MessageGroupId="state-group-01")
        return json.dumps(response)
    ```
 

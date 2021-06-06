@@ -46,7 +46,7 @@
   vars:
     project_path: "{{ lookup('env', 'PWD') }}"
     aws_region: "ap-southeast-1"
-    sqs_queue_name: "emr-state-queue"
+    sqs_queue_name: "emr-state-queue.fifo"
     exec_exporter_user: "hadoop"
     private_key_file: "{{ lookup('env', 'PWD') }}/emr-key.pem"
   roles:
