@@ -28,7 +28,7 @@
         group: root
         mode: 0644
       register: nn_jmx_conf
-      when: __instance_hadoop_run.results[0].stdout == "true"
+      when: __instance_hadoop_run.results[0].stdout != ""
 #    - debug: var=nn_jmx_conf
 
     - name: Copy the datanode jmx config file
@@ -39,7 +39,7 @@
         group: root
         mode: 0644
       register: dn_jmx_conf
-      when: __instance_hadoop_run.results[1].stdout == "true"
+      when: __instance_hadoop_run.results[1].stdout != ""
 #    - debug: var=dn_jmx_conf
     - name: Copy the resourcemanager jmx config file
       template:
@@ -49,7 +49,7 @@
         group: root
         mode: 0644
       register: rm_jmx_conf
-      when: __instance_hadoop_run.results[2].stdout == "true"
+      when: __instance_hadoop_run.results[2].stdout != ""
 
     - name: Copy the nodemanager jmx config file
       template:
@@ -59,7 +59,7 @@
         group: root
         mode: 0644
       register: nm_jmx_conf
-      when: __instance_hadoop_run.results[3].stdout == "true"
+      when: __instance_hadoop_run.results[3].stdout != ""
 
 - name: add java opts to namenode
   blockinfile:
