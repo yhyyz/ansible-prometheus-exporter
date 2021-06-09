@@ -7,18 +7,17 @@
         owner: root
         group: root
         mode: u+rwX,g+rwX,o=rX
-    - name: Get node run jps
-      shell: "cat /mnt/var/lib/info/extraInstanceData.json|jq .{{ item }}"
-      args:
-        warn: false
-      register: __node_run_jps
+    - name: get instance hadoop run process
+      shell: "ps aux|grep {{ item }}| grep -v grep"
+      register: __instance_hadoop_run
       with_items:
-        - "runNameNode"
-        - "runDataNode"
-        - "runResourceManager"
-        - "runNodeManager"
+        - "NameNode"
+        - "DataNode"
+        - "ResourceManager"
+        - "NodeManager"
       tags:
-        - node_run_jps
+        - instance_hadoop_run
+
     - name: Copy the namenode jmx config file
       template:
         src: hdfs_nn_jmx_config.yaml.j2
@@ -27,7 +26,7 @@
         group: root
         mode: 0644
       register: nn_jmx_conf
-      when: __node_run_jps.results[0].stdout == "true"
+      when: __instance_hadoop_run.results[0].stdout == "true"
 #    - debug: var=nn_jmx_conf
 
     - name: Copy the datanode jmx config file
@@ -38,7 +37,7 @@
         group: root
         mode: 0644
       register: dn_jmx_conf
-      when: __node_run_jps.results[1].stdout == "true"
+      when: __instance_hadoop_run.results[1].stdout == "true"
 #    - debug: var=dn_jmx_conf
     - name: Copy the resourcemanager jmx config file
       template:
@@ -48,7 +47,7 @@
         group: root
         mode: 0644
       register: rm_jmx_conf
-      when: __node_run_jps.results[2].stdout == "true"
+      when: __instance_hadoop_run.results[2].stdout == "true"
 
     - name: Copy the nodemanager jmx config file
       template:
@@ -58,7 +57,7 @@
         group: root
         mode: 0644
       register: nm_jmx_conf
-      when: __node_run_jps.results[3].stdout == "true"
+      when: __instance_hadoop_run.results[3].stdout == "true"
 
 - name: add java opts to namenode
   blockinfile:
@@ -68,7 +67,6 @@
       export HDFS_NAMENODE_OPTS="${HDFS_NAMENODE_OPTS} -javaagent:{{ _jmx_exporter_jar_install_dir }}/{{ jmx_exporter_signature }}={{jmx_nn_prometheus_port}}:/etc/jmx_exporter/hdfs_nn_jmx_config.yaml"
   notify:
     - restart namenode
-    - tag nn instance
 #  changed_when: true
   when: "'skipped' not in nn_jmx_conf"
 
@@ -80,7 +78,6 @@
       export HADOOP_DATANODE_OPTS="${HADOOP_DATANODE_OPTS} -javaagent:{{ _jmx_exporter_jar_install_dir }}/{{ jmx_exporter_signature }}={{jmx_dn_prometheus_port}}:/etc/jmx_exporter/hdfs_dn_jmx_config.yaml"
   notify:
     - restart datanode
-    - tag dn instance
 #  changed_when: true
   when: "'skipped' not in dn_jmx_conf"
 
@@ -92,7 +89,6 @@
       export YARN_RESOURCEMANAGER_OPTS=" -javaagent:{{ _jmx_exporter_jar_install_dir }}/{{ jmx_exporter_signature }}={{jmx_rm_prometheus_port}}:/etc/jmx_exporter/yarn_rm_jmx_config.yaml"
   notify:
     - restart resourcemanager
-    - tag rm instance
 #  changed_when: true
   when:  "'skipped' not in rm_jmx_conf"
 
@@ -104,6 +100,5 @@
       export YARN_NODEMANAGER_OPTS=" -javaagent:{{ _jmx_exporter_jar_install_dir }}/{{ jmx_exporter_signature }}={{jmx_nm_prometheus_port}}:/etc/jmx_exporter/yarn_nm_jmx_config.yaml"
   notify:
     - restart nodemanager
-    - tag nm instance
 #  changed_when: true
   when: "'skipped' not in nm_jmx_conf"

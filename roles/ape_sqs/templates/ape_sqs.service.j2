@@ -9,7 +9,7 @@ WorkingDirectory={{ project_path }}
 Type=simple
 User={{ _ape_service_system_user }}
 Group={{ _ape_service_system_group }}
-ExecStart={{ _ape_venv_dir }}/{{_ape_venv_name}}/bin/python {{ape_sqs_lib_dir}}/sqs_task.py {{aws_region}} {{sqs_queue_name}} {{exec_exporter_user}} {{private_key_file}} \
+ExecStart={{ _ape_venv_dir }}/{{_ape_venv_name}}/bin/python {{ape_sqs_lib_dir}}/sqs_task.py {{ meta_json_file }} {{private_key_path}} \
 
 SyslogIdentifier=ape_sqs
 Restart=always

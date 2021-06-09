@@ -65,7 +65,7 @@
 │   │   ├── cloudalchemy.prometheus # 在EC2安装Prometheus，开源提供
 │   │   ├── jmx_exporter    # 部署jmx_exporter到EMR
 │   │   └── node_exporter   # 部署node_exporter到EMR
-│   └── update_scrape.py    #  exporter 安装完毕后触发更新Prometheus的scrape
+│   └── reg_sd.py    #  exporter 安装完毕后触发更新Prometheus的scrape
 ```
 
 ##### 2.3 Ansible 安装

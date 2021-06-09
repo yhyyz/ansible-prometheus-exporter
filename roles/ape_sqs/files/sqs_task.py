@@ -8,8 +8,9 @@ import sys
 global aws_region
 import time
 
-def event_handler(event,exec_exporter_user,private_key_file):
+def event_handler(event,meta_base,private_key_path):
     is_ok = False
+
     try:
         if is_resize_complete(event):
             cluster_id = event['detail']["clusterId"]
@@ -19,7 +20,13 @@ def event_handler(event,exec_exporter_user,private_key_file):
                 return True
             hosts = ",".join(untaged_ins)+","
             print("untaged host: {0}".format(hosts))
-            cli = PlaybookCLI([" ", '-i', hosts, '-u', exec_exporter_user, '--private-key', private_key_file, "--extra-vars", "cluster_id="+cluster_id, "exporter_playbook.yml"])
+            ssh_user = ""
+            private_key = ""
+            for base in meta_base:
+                if base["cluster_id"] == cluster_id:
+                    ssh_user = base["ssh_user"]
+                    private_key = base["private_key"]
+            cli = PlaybookCLI([" ", '-i', hosts, '-u', ssh_user, '--private-key', private_key_path+"/"+private_key, "--extra-vars", "deploy_cluster_id="+cluster_id, "exporter_playbook.yml"])
             results = cli.run()
             if results == 0:
                 is_ok = True
@@ -113,7 +120,10 @@ def filter_instance(emr_instances):
     return list(set(untag_list))
 
 
-def process_msg(sqs_queue_name, exec_exporter_user, private_key_file):
+def process_msg(meta,private_key_path):
+    meta_base = meta["base"]
+    aws_region = meta["aws_region"]
+    sqs_queue_name = meta["sqs_queue_name"]
     sqs = boto3.resource('sqs',region_name=aws_region)
     while 1:
         try:
@@ -131,7 +141,7 @@ def process_msg(sqs_queue_name, exec_exporter_user, private_key_file):
                 print(message.body)
                 event = json.loads(message.body)
                 # print(event)
-                res = event_handler(event,exec_exporter_user,private_key_file)
+                res = event_handler(event,meta_base,private_key_path)
                 if res:
                     print("delete msg")
                     message.delete()
@@ -139,9 +149,14 @@ def process_msg(sqs_queue_name, exec_exporter_user, private_key_file):
                 print("process sqs  error: ", error)
 
 
+def load_json_from_file(file_path):
+    with open(file_path, 'r') as f:
+        data = json.load(f)
+        return data
+
+
 if __name__ == '__main__':
-    aws_region = sys.argv[1]
-    sqs_queue_name = sys.argv[2]
-    exec_exporter_user = sys.argv[3]
-    private_key_file = sys.argv[4]
-    process_msg(sqs_queue_name,exec_exporter_user, private_key_file)
+    meta_json_file = sys.argv[1]
+    private_key_path = sys.argv[2]
+    meta = load_json_from_file(meta_json_file)
+    process_msg(meta,private_key_path)

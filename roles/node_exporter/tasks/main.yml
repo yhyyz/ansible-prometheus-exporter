@@ -37,9 +37,28 @@
   tags:
     - node_exporter_run
 
+- name: check node_exporter started
+  become: true
+  shell: "ps aux|grep node_exporter|grep -v grep "
+  register: __node_exporter_start
+  when:
+   - not ansible_check_mode
+
+- name: tag instance
+  become: true
+  shell: |
+     EC2_INSTANCE_ID=`wget -q -O - http://169.254.169.254/latest/meta-data/instance-id`
+     EC2_AVAIL_ZONE=`wget -q -O - http://169.254.169.254/latest/meta-data/placement/availability-zone`
+     EC2_REGION="`echo \"$EC2_AVAIL_ZONE\" | sed -e 's:\([0-9][0-9]*\)[a-z]*\$:\\1:'`"
+     /usr/bin/aws ec2 create-tags --region $EC2_REGION --resources $EC2_INSTANCE_ID --tags Key=node_exporter,Value=installed
+  when:
+    - not ansible_check_mode
+    - __node_exporter_start.stdout != ""
+
+
 - name: node_exporter installed and update prometheus_scrape_url
   become: true
   connection: local
-  shell: "{{ python_venv_execute }} {{update_scrape_script}} {{ aws_region }} {{ cluster_id }} {{ip_type}} {{prometheus_sd_dir}}"
+  shell: "{{ python_venv_execute }} {{update_scrape_script}} {{ meta_json_file }} {{ deploy_cluster_id }}"
   when:
    - not ansible_check_mode
