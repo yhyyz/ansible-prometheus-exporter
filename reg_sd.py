@@ -51,16 +51,19 @@ def format_consul(ip, port, name, tags):
 
 
 def request_consul(url, payload):
-    print(url)
-    print(json.dumps(payload))
     try:
         headers = {"Content-Type": "application/json"}
         res = requests.put(url, data=json.dumps(payload),headers=headers)
         if res.status_code == 200:
-            print("request ok")
+            print("reg ok")
+            # print("reg url:{0}".format(url))
+            # print("reg service: {0}".format(json.dumps(payload)))
+        else:
+            sys.exit(-1)
         res.raise_for_status()
     except Exception as e:
         print(e)
+        sys.exit(-1)
 
 
 def reg_nj_consul(service_meta, aws_region,ip_type, cluster_id,cluster_name, consul_address):
