@@ -2,7 +2,7 @@
 - name: validate deploy_cluster_id variables
   fail:
     msg: "Required variable  deploy_cluster_id has not been provided"
-  when: "{{deploy_cluster_id}}" == ""
+  when: deploy_cluster_id is undefined
 
 - name: Assert usage of systemd as an init system
   assert:
