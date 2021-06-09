@@ -19,9 +19,10 @@
     - jmx_exporter_configure
 
 - name: check instance jmx run
-  shell: "ps aux|grep {{ item }}|grep jmx_prometheus_javaagent| grep -v grep"
+  shell: "ps aux|grep {{ item }}|grep jmx_prometheus_javaagent| grep -v grep|cat"
   become: true
   register: __instance_jmx_run
+  ignore_errors: true
   with_items:
     - "NameNode"
     - "DataNode"

@@ -8,8 +8,9 @@
         group: root
         mode: u+rwX,g+rwX,o=rX
     - name: get instance hadoop run process
-      shell: "ps aux|grep {{ item }}| grep -v grep"
+      shell: "ps aux|grep {{ item }}| grep -v grep|cat"
       register: __instance_hadoop_run
+      ignore_errors: true
       with_items:
         - "NameNode"
         - "DataNode"

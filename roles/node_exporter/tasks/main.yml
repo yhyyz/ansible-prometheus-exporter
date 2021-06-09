@@ -39,8 +39,9 @@
 
 - name: check node_exporter started
   become: true
-  shell: "ps aux|grep node_exporter|grep -v grep "
+  shell: "ps aux|grep node_exporter|grep -v grep |cat "
   register: __node_exporter_start
+  ignore_errors: true
   when:
    - not ansible_check_mode
 
