@@ -57,7 +57,7 @@
   vars:
     project_path: "{{ lookup('env', 'PWD') }}"
     meta_json_file: "{{ lookup('env', 'PWD') }}/meta.json"
-    private_key_path: "{{ lookup('env', 'PWD')/keys }}"
+    private_key_path: "{{ lookup('env', 'PWD') }}/keys"
   roles:
     - ape_sqs
   tags:
