@@ -47,6 +47,7 @@
     consul_group_name: all
     consul_client_address: 0.0.0.0
     consul_encrypt_enable: false
+    consul_node_role: server
   roles:
   - ansible-consul
   tags: ape_consul
