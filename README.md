@@ -2,7 +2,7 @@
 
 [toc]
 
-### EMR  Monitor 
+### EMR  Monitor
 
 #### 一、背景
 
@@ -54,18 +54,21 @@
 
 ```yml
 ├── ansible-prometheus-exporter   # 项目名称
+│   ├── keys                     # 存放ssh key 的目录，里面两个空文件，把你的多个key放在此目录下
 │   ├── ansible.cfg              # ansibl 的全局配置文件
 │   ├── ape_playbook.yml         # ape[项目名称简写], 这个是部署Prometheus+Grafana+ape自身服务
 │   ├── aws_ec2.yml							 # 动态EC2 Inventory, 可以动态获取要部署的Instance
-│   ├── emr-key.pem              # EMR的ssh key, GitHub上这个文件是空的，将自己的key内容放进去
 │   ├── exporter_playbook.yml    # 自动部署 node_exporter 和jmx_exporter
 │   ├── roles                    # 将各个模块，以Ansible Role的方式封装
 │   │   ├── ape_sqs          # 集群Resize过程，触发Lambda消息发送到SQS,该服务消费SQS,安exporter
 │   │   ├── cloudalchemy.grafana # 在EC2安装Grafana，开源提供
+│   │   ├── ansible-consul #  在EC2安装Consul，开源提供
 │   │   ├── cloudalchemy.prometheus # 在EC2安装Prometheus，开源提供
 │   │   ├── jmx_exporter    # 部署jmx_exporter到EMR
 │   │   └── node_exporter   # 部署node_exporter到EMR
-│   └── reg_sd.py    #  exporter 安装完毕后触发更新Prometheus的scrape
+│   ├── get_key.sh           # 根据集群名字，从meta获取ssh key
+│   ├── meta.json           # 里面是配置信息，将EMR多个集群信息在这里配置
+│   └── reg_sd.py    #  exporter 安装完毕后触发更新Prometheus的scrape, 默认是注册到consul服务发现
 ```
 
 ##### 2.3 Ansible 安装
@@ -91,30 +94,47 @@ pip install boto3
 git clone https://github.com/yhyyz/ansible-prometheus-exporter.git
 cd ansible-prometheus-exporter
 
-# 配置ape_playbook.yml
-# 该配置是用来安装Prometheus，Grafana，ape_sqs 这三个服务的，其中ape_sqs是用来向Resize过程产生的Instance部署exporter的，这个文件你只需要配置两个个参数就可以了，其他保持默认就好，之后有需要再进行高阶配置。 1. aws_region这个参数，指的是你的EMR在哪个Region下，里面默认的是 ap-southeast-1。 2. sqs_queue_name 这个就是EMR集群状态改变触发Lambda发送消息到SQS的Queue的名称，默认的是emr-state-queue， 你可以修改，之后创建Queue时，使用你修改的名字创建即可，这个会在部署Lambda时说明。
+# 配置meta.json, 其内容格式如下
+{
+  "base": [
+    {
+      "cluster_id": "j-2Z16PYH1GWCDM", # 集群ID
+      "cluster_name": "test-monitor-005", # 集群名字
+      "ssh_user": "hadoop", # ssh user
+      "private_key": "emr-key.pem", # ssh key ,这里写key的名字，所有的key文件，放到keys目录下
+      "ip_type": "PrivateIpAddress", # 默认私有IP
+      "prometheus_sd_dir": "",   # 服务发现的方式，这是file_sd服务发现，空值不启用
+      "consul_address": "http://localhost:8500/v1/agent/service/register"  # consul 服务发现地址
+    },
+   ...... 可配置多个集群
+  ],
+  "aws_region": "ap-southeast-1",  # 指的是你的EMR在哪个Region下，里面默认的是 ap-southeast-1
+  "sqs_queue_name": "emr-state-queue.fifo"  # sqs 队列名称，这个就是EMR集群状态改变触发Lambda发送消息到SQS的Queue的名称，默认的是emr-state-queue.fifo,可以修改,之后创建Queue时，使用你修改的名字创建即可，这个会在部署Lambda时说明。
+}
 
 # 配置aws_ec2.yml
 # 这里面只需要配置一个参数Regions即可，默认是 ap-southeast-1, 可以执行如下命令替换,注意命令中修改为你自己的信息, 当然也可以vi 打开文件进行修改
 sed -i  's/ap-southeast-1/your-region/g' aws_ec2.yml
 
-# 配置exporter_playbook.yml
-# 这里面需要配置另个参数，aws_region， cluster_id， 第一个依然默认ap-southeast-1， cluster_id指的是你想要安装Exporter到EMR集群的ID。 这两个参数在在该文件中每个出现了两次，都要配置，一个代码node_exporter,一个代表jmx_exporter. 可以执行如下命令替换,注意命令中修改为你自己的信息，当然也可以vi 打开文件进行修改
-sed  -i '/aws_region/s/"\(.*\)"/"your-region"/g'  exporter_playbook.yml
-sed  -i '/cluster_id/s/"\(.*\)"/"your-cluster_id"/g'   exporter_playbook.yml
-
-# 配置emr-key.pem
-# 将你访问的erm集群ssh key内容放到这个文件中即可
+# 将你访问的erm集群ssh key, 放到keys目录中，注意修改权限为500
 ```
 
 ##### 2.5 部署APE
 
 ```shell
-# 执行命令部署Prometheus ,Grafana, ape_sqs 
+# 执行命令部署Prometheus ,Grafana,Consul, ape_sqs
 ansible-playbook --connection=local  -i  localhost, -u ec2-user ape_playbook.yml
+
+# 下面的命令是根据tag按照服务单个执行
+ansible-playbook --connection=local  -i  localhost, -u ec2-user  --tags "ape_prometheus"    ape_playbook.yml
+ansible-playbook --connection=local  -i  localhost, -u ec2-user  --tags "ape_grafana"    ape_playbook.yml
+ansible-playbook --connection=local  -i  localhost, -u ec2-user  --tags "ape_consul" ape_playbook.yml
+ansible-playbook --connection=local  -i  localhost, -u ec2-user  --tags "ape_sqs" ape_playbook.yml
+
 # 执行完之后，服务就完整完成，并启动，直接访问即可 1. grafana 端口3000，用户名密码都是：admin， 第一此访问需要你修改密码。 2. pometheus web端口9090 3. ape_sqs服务会通过systemed启动。 可通过命令检查一下
 sudo systemctl status prometheus
 sudo systemctl status grafana-server
+sudo systemctl status consul
 sudo systemctl status ape_sqs
 ```
 
@@ -140,24 +160,28 @@ ansible-inventory -i aws_ec2.yml --graph
   |  |--172.31.1.215
   |  |--172.31.3.16
   |--@ungrouped:
-  
+
 # 执行如下命令可以向节点部署node_exporter和jvm_exporter, 该命令中注意 --limit 参数的值，就是上述命令输出结果的@之后的值， 这其实是给集群安装CORE，MASTER，TASK 节点分了组，执行安装命令是可以按组安装，也可以指定单台机器按照。 最好先指定单台机器按照，一切OK，在按组批量安装。
 
-# 单台机器安装， 注意ip后的逗号不能省略
-ansible-playbook -i 172.31.3.16,  -u hadoop  --private-key emr-key.pem  exporter_playbook.yml
+# 单台机器安装， 注意ip后的逗号不能省略, 注意get_key.sh 后边的参数就是你要部署的emr集群的名字，我这里是test-monitor-005, 注意替换为你的名字。 --extra-vars 里面的deploy_cluster_id后面的参数，是集群的ID，注意替换为你自己的集群ID
 
+ansible-playbook -i  172.31.3.16,  -u hadoop  --private-key `sh ./get_key.sh test-monitor-005` --extra-vars "deploy_cluster_id=j-2Z16PYH1GWCDM" exporter_playbook.yml
 
 # 按Tag 分组安装命令如下，注意替换limit的值，为你自己的值，最好先执行单台安装测试
 # 需要强调的是，jmx exporter的部署是需要重启JVM进程的，尤其Master节点上的Namenode进程和ResourceManager进程重启，你的集群会处于不可用状态。
-ansible-playbook -i aws_ec2.yml -u hadoop  --private-key emr-key.pem  --limit emr_flow_role___j_KO4KLWAKC4GZ____TASK__ exporter_playbook.yml
+ansible-playbook -i aws_ec2.yml -u hadoop  --private-key `sh ./get_key.sh test-monitor-005` --extra-vars "deploy_cluster_id=j-2Z16PYH1GWCDM" --limit     emr_flow_role___j_KO4KLWAKC4GZ____TASK__ exporter_playbook.yml
 
 # 安装执行完毕后，可以通过如下命令测试
 # node_exporter metrics
 curl 172.31.3.16:9100/metrics
 #jmx exporter , namenode,datanode,resourcemanager,nodemanager 四个服务exporter端口默认分别是7005，7006，7007，7008, 根据你节点服务同步，选择端口测试即可
 curl 172.31.3.16:7008/metrics
-
-
+# consul 服务发现，可以通过下面API，查看已安装的服务在consul中是否成功注册，同时consul在Prometheus中也已自动配置，相关的tag已经打到了consul的service tag中
+curl http://localhost:8500/v1/catalog/service/node_exporter  |jq .
+curl http://localhost:8500/v1/catalog/service/jmx_exporter_nm |jq .
+curl http://localhost:8500/v1/catalog/service/jmx_exporter_dn |jq .
+curl http://localhost:8500/v1/catalog/service/jmx_exporter_rm |jq .
+curl http://localhost:8500/v1/catalog/service/jmx_exporter_nm |jq .
 ```
 
 ##### 2.7 查看Metrics
@@ -183,7 +207,7 @@ jmx_exporter  根据你的Metrics需求在Grafana上配置即可
    ```python
    import json
    import boto3
-   
+
    def lambda_handler(event, context):
        json_str = json.dumps(event)
        sqs = boto3.resource('sqs')
@@ -225,4 +249,3 @@ jmx_exporter  根据你的Metrics需求在Grafana上配置即可
 3. 当前代码只是V1版本，可根据客户测试及使用，双方共同解决BUG及功能升级。
 4. 再次强调，对应jmx_exporter的安装是会自动重启JVM的，node_exporter不影响集群服务。
 ```
-

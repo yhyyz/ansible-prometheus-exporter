@@ -41,7 +41,7 @@ def format_sd(metrics, job,cluster_id,cluster_name):
 
 def format_consul(ip, port, name, tags):
     register_data = {}
-    register_data["ID"] = name
+    register_data["ID"] = name+"_"+ip
     register_data["Name"] = name
     register_data["Tags"] = tags
     register_data["Address"] = ip
@@ -98,6 +98,7 @@ def write_sd_file(prometheus_sd_dir, cluster_id, sd_str):
     file_name = prometheus_sd_dir + "/" + cluster_id + "-" + write_time + ".json"
     with open(file_name, "w") as f:
         f.write(sd_str)
+        print("write file sd ok")
 
 
 def load_json_from_file(file_path):
