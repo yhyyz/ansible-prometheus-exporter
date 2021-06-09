@@ -1,10 +1,8 @@
 ---
-- name: validate some variables
+- name: validate deploy_cluster_id variables
   fail:
-    msg: "Required variable {{item}} has not been provided"
-  when: vars[item] is undefined
-  loop:
-    - "{{deploy_cluster_id}}"
+    msg: "Required variable  deploy_cluster_id has not been provided"
+  when: "{{deploy_cluster_id}}" == ""
 
 - name: Assert usage of systemd as an init system
   assert:
