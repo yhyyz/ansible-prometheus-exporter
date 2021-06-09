@@ -80,5 +80,7 @@
   become: true
   connection: local
   shell: "{{ python_venv_execute }} {{update_scrape_script}} {{ meta_json_file }} {{ deploy_cluster_id }} "
+  register: __jmx_scrapy_update
   when:
    - not ansible_check_mode
+- debug: var=__jmx_scrapy_update
