@@ -18,6 +18,7 @@
         - "NodeManager"
       tags:
         - instance_hadoop_run
+    - debug: var=__instance_hadoop_run
 
     - name: Copy the namenode jmx config file
       template:
