@@ -45,6 +45,7 @@
   become: true
   vars:
     consul_group_name: all
+    consul_client_address: 0.0.0.0
   roles:
   - ansible-consul
   tags: ape_consul
