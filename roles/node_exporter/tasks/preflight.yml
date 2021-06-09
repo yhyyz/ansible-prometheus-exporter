@@ -1,7 +1,7 @@
 ---
 - name: Assert emr deploy_cluster_id vars set
   assert:
-    that: {{deploy_cluster_id}} != ""
+    that: "{{deploy_cluster_id}}" != ""
     msg: "Must set vars deploy_cluster_id"
 
 - name: Assert usage of systemd as an init system
