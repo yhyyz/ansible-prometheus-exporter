@@ -36,3 +36,8 @@
         name: ansible
         virtualenv: "{{ _ape_venv_dir }}/{{_ape_venv_name}}"
         virtualenv_site_packages: yes
+    - name: Install ansible
+      pip:
+        name: requests
+        virtualenv: "{{ _ape_venv_dir }}/{{_ape_venv_name}}"
+        virtualenv_site_packages: yes
