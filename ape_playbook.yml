@@ -42,6 +42,9 @@
 
 - name: install consul
   hosts: all
+  become: true
+  vars:
+    consul_group_name: all
   roles:
   - ansible-consul
   tags: ape_consul
