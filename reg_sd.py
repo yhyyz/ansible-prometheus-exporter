@@ -41,7 +41,7 @@ def format_sd(metrics, job,cluster_id,cluster_name):
 
 def format_consul(ip, port, name, tags):
     register_data = {}
-    register_data["ID"] = ip
+    register_data["ID"] = name
     register_data["Name"] = name
     register_data["Tags"] = tags
     register_data["Address"] = ip
