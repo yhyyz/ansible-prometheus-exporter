@@ -15,6 +15,10 @@
           - files:
               - "{{ prometheus_config_dir }}/file_sd/*.yml"
               - "{{ prometheus_config_dir }}/file_sd/*.json"
+      - job_name: "consul_sd"
+        consul_sd_configs:
+          - server: localhost:8500
+
   tags:
     - ape_prometheus
 
