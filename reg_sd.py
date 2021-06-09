@@ -51,7 +51,8 @@ def format_consul(ip, port, name, tags):
 
 
 def request_consul(url, payload):
-    requests.put(url, data=payload)
+    res = requests.put(url, data=payload)
+    print(res.text)
 
 
 def reg_nj_consul(service_meta, aws_region,ip_type, cluster_id,cluster_name, consul_address):

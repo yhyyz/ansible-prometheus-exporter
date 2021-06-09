@@ -60,6 +60,8 @@
 - name: node_exporter installed and update prometheus_scrape_url
   become: true
   connection: local
+  register: __node_exporter_scrapy_install
   shell: "{{ python_venv_execute }} {{update_scrape_script}} {{ meta_json_file }} {{ deploy_cluster_id }}"
   when:
    - not ansible_check_mode
+- debug: var=__node_exporter_scrapy_install
