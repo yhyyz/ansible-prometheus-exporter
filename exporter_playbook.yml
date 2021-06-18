@@ -35,6 +35,10 @@
   serial: 2
   vars:
     jmx_exporter_version: 0.15.0
+    force_export_opt_nn: false
+    force_export_opt_dn: false
+    force_export_opt_rm: false
+    force_export_opt_nm: false
     python_venv_execute: "/usr/local/venv/ape-venv/bin/python"
     update_scrape_script: "{{ lookup('env', 'PWD') }}/reg_sd.py"
     meta_json_file: "{{ lookup('env', 'PWD') }}/meta.json"
