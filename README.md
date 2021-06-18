@@ -2,6 +2,11 @@
 
 [toc]
 
+### 更新记录
+#### 20200618
+* jmx exporter 加入serial参数，默认为1，表示每次执行一台机器，正常完毕后自动执行下一台。 在exporter_playbook.yml中配置
+* jmx exporter 加入wait_for任务，重启jmx进程后会等待端口可用，如果超时时间内不可用安装失败退出，等待超时时间(namenode:8020 超时300秒，datannode:50010 超时60秒，resourcemanager:8032 超时60秒, nodemanager:8041 超时60秒)
+
 ### EMR  Monitor
 
 #### 一、背景
