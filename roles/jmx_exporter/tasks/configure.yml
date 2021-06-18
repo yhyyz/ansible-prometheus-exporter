@@ -70,7 +70,7 @@
   notify:
     - restart namenode
 #  changed_when: true
-  when: "'skipped' not in nn_jmx_conf" or force_export_opt_nn
+  when: "'skipped' not in nn_jmx_conf or force_export_opt_nn"
 
 - name: add java opts to datanode
   blockinfile:
@@ -81,7 +81,7 @@
   notify:
     - restart datanode
 #  changed_when: true
-  when: "'skipped' not in dn_jmx_conf" or force_export_opt_dn
+  when: "'skipped' not in dn_jmx_conf or force_export_opt_dn"
 
 - name: add java opts to resourcemanager
   blockinfile:
@@ -92,7 +92,7 @@
   notify:
     - restart resourcemanager
 #  changed_when: true
-  when:  "'skipped' not in rm_jmx_conf" or force_export_opt_rm
+  when:  "'skipped' not in rm_jmx_conf or force_export_opt_rm "
 
 - name: add java opts to nodemanager
   blockinfile:
@@ -103,4 +103,4 @@
   notify:
     - restart nodemanager
 #  changed_when: true
-  when: "'skipped' not in nm_jmx_conf" or  force_export_opt_nm
+  when: "'skipped' not in nm_jmx_conf or  force_export_opt_nm"
