@@ -32,6 +32,7 @@
 
 - name: Deploy jmx_exporter
   hosts: all
+  serial: 2
   vars:
     jmx_exporter_version: 0.15.0
     python_venv_execute: "/usr/local/venv/ape-venv/bin/python"
