@@ -24,7 +24,10 @@ def gen_exporter_instance_sd(aws_region,exporter_tag, tag_value, ip_type, cluste
     for reserv in ec2_response["Reservations"]:
         instances_list = reserv["Instances"]
         for ins in instances_list:
-            ip_list.append(ins[ip_type])
+            if ins.has_key(ip_type):
+                ip_list.append(ins[ip_type])
+            else:
+                print("ins has not: {0} key, ins: {1}".format(ip_type,json.dumps(ins)))
     return ip_list
 
 

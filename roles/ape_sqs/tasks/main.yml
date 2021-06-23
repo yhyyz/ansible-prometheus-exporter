@@ -7,8 +7,8 @@
 
 - import_tasks: install.yml
   become: true
-  when:
-     not  __ape_venv_is_installed.stat.exists
+#  when:
+#     not  __ape_venv_is_installed.stat.exists
   tags:
     - ape_install
 

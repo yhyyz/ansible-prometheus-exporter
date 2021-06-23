@@ -13,6 +13,10 @@ cluster_name=`echo $i | jq -c -r '.cluster_name'`
 if [ $cluster_name = $run_cluster_name ];then
   private_key=`echo $i | jq -c -r  '.private_key'`
   key=$private_key_path$private_key
+  ssh_user=`echo $i | jq -c -r  '.ssh_user'`
+  cluster_id=`echo $i | jq -c -r  '.cluster_id'`
+  echo $ssh_user
   echo $key
+  echo $cluster_id
 fi
 done

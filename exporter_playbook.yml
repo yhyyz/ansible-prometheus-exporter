@@ -17,18 +17,55 @@
 #  tasks:
 #  - name: Pinging Host
 #    ping:
+- name: prompt aws_region
+  hosts: localhost
+  vars:
+  vars_prompt:
+    - name: "aws_region"
+      prompt: "Enter AWS Region,default:"
+      private: no
+      default: 'ap-southeast-1'
+  tasks:
+    - name: gen mata json and set role for deploy
+      shell: python gen_meta_role.py -a "{{ aws_region }}"
+    - name: get meta info
+      shell: cat meta.json |jq -c -r .base[].cluster_name
+      register: __meta_cluster_name
+    - name: set fact cluster_name
+      set_fact:
+          meta_cluster_name: "{{ __meta_cluster_name.stdout }}"
+
+- name: prompt deploy cluster_name
+  hosts: localhost
+  vars_prompt:
+    - name: "emr_deploy_cluster"
+      private: no
+      prompt: "Enter the cluster name from :\n{{ hostvars['localhost']['meta_cluster_name'] }}\n"
+  tasks:
+    - name: get deploy cluster meta info
+      shell: sh get_key.sh {{emr_deploy_cluster}}
+      register: __deploy_cluster_meta_info
+    - name: set fact deploy_cluster_meta_info
+      set_fact:
+        deploy_cluster_meta_info: "{{__deploy_cluster_meta_info.stdout_lines}}"
+    - debug: var=__deploy_cluster_meta_info
+
 - name: Deploy node_exporter
   hosts: all
   roles:
     - node_exporter
   vars:
+    ansible_ssh_private_key_file: "{{ hostvars['localhost']['deploy_cluster_meta_info'][1] }}"
     python_venv_execute: "/usr/local/venv/ape-venv/bin/python"
     update_scrape_script: "{{ lookup('env', 'PWD') }}/reg_sd.py"
     node_exporter_version: 1.1.1
     meta_json_file: "{{ lookup('env', 'PWD') }}/meta.json"
-    deploy_cluster_id: "{{ deploy_cluster_id }}"
+#    deploy_cluster_id: "{{ deploy_cluster_id }}"
+    deploy_cluster_id: "{{ hostvars['localhost']['deploy_cluster_meta_info'][2] }}"
   tags:
     - node_exporter
+  tasks:
+    - debug: var=deploy_cluster_id
 
 - name: Deploy jmx_exporter
   hosts: all
@@ -39,10 +76,16 @@
     force_export_opt_dn: false
     force_export_opt_rm: false
     force_export_opt_nm: false
+    wart_for_port_nn: 8020
+    wart_for_port_dn: 50010
+    wart_for_port_rm: 8032
+    wart_for_port_nm: 8041
+    ansible_ssh_private_key_file: "{{ hostvars['localhost']['deploy_cluster_meta_info'][1] }}"
     python_venv_execute: "/usr/local/venv/ape-venv/bin/python"
     update_scrape_script: "{{ lookup('env', 'PWD') }}/reg_sd.py"
     meta_json_file: "{{ lookup('env', 'PWD') }}/meta.json"
-    deploy_cluster_id: "{{ deploy_cluster_id }}"
+#    deploy_cluster_id: "{{ deploy_cluster_id }}"
+    deploy_cluster_id: "{{ hostvars['localhost']['deploy_cluster_meta_info'][2] }}"
     re_tag: true
   roles:
     - jmx_exporter

@@ -37,6 +37,8 @@
   tags:
     - node_exporter_run
 
+- meta: flush_handlers
+
 - name: check node_exporter started
   become: true
   shell: "ps aux|grep node_exporter|grep -v grep |cat "

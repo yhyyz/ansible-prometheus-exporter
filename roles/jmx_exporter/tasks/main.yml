@@ -18,6 +18,8 @@
   tags:
     - jmx_exporter_configure
 
+- meta: flush_handlers
+
 - name: check instance jmx run
   shell: "ps aux|grep {{ item }}|grep jmx_prometheus_javaagent| grep -v grep|cat"
   become: true

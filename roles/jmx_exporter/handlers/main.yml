@@ -8,9 +8,10 @@
   when:
     - not ansible_check_mode
 
-- name: Wait for namenode port 8020
+- name: Wait for namenode port  "{{ wart_for_port_nn }}"
   wait_for:
-    port: 8020
+    host: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
+    port: "{{ wart_for_port_nn }}"
     delay: 10
     sleep: 3
     timeout: 300
@@ -27,9 +28,10 @@
   when:
     - not ansible_check_mode
 
-- name: Wait for datanode port 50010
+- name: Wait for datanode port  "{{ wart_for_port_dn }}"
   wait_for:
-    port: 50010
+    host: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
+    port: "{{ wart_for_port_dn }}"
     delay: 10
     sleep: 3
     timeout: 60
@@ -46,9 +48,10 @@
   when:
     - not ansible_check_mode
 
-- name: Wait for resourcemanager port 8032
+- name: Wait for resourcemanager port  "{{ wart_for_port_rm }}"
   wait_for:
-    port: 8032
+    host: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
+    port: "{{ wart_for_port_rm }}"
     delay: 10
     sleep: 3
     timeout: 60
@@ -65,9 +68,10 @@
   when:
     - not ansible_check_mode
 
-- name: Wait for nodemanager port 8041
+- name: Wait for nodemanager port  "{{ wart_for_port_nm }}"
   wait_for:
-    port: 8041
+    host: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
+    port: "{{ wart_for_port_nm }}"
     delay: 10
     sleep: 3
     timeout: 60
