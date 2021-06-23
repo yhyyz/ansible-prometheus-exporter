@@ -1,13 +1,3 @@
-#- hosts: all
-#  gather_facts: no
-#  vars_prompt:
-#    - name: "host"
-#      prompt: "please enter the target hostname from:  {{ groups }}"
-#      private: no
-#  tasks:
-#    - add_host:
-#        name: "{{ host }}"
-#        groups: chosen_host
 #- name: Ping Host
 #  hosts: all
 #  gather_facts: false
@@ -29,12 +19,15 @@
     - name: gen mata json and set role for deploy
       shell: python gen_meta_role.py -a "{{ aws_region }}"
       delegate_to: loaclhost
+      delegate_facts: true
     - name: get meta info
       shell: cat meta.json |jq -c -r .base[].cluster_name
       delegate_to: loaclhost
+      delegate_facts: true
       register: __meta_cluster_name
     - name: set fact cluster_name
       delegate_to: loaclhost
+      delegate_facts: true
       set_fact:
           meta_cluster_name: "{{ __meta_cluster_name.stdout }}"
 
@@ -48,9 +41,11 @@
     - name: get deploy cluster meta info
       shell: sh get_key.sh {{emr_deploy_cluster}}
       delegate_to: loaclhost
+      delegate_facts: true
       register: __deploy_cluster_meta_info
     - name: set fact deploy_cluster_meta_info
       delegate_to: loaclhost
+      delegate_facts: true
       set_fact:
         deploy_cluster_meta_info: "{{__deploy_cluster_meta_info.stdout_lines}}"
     - debug: var=__deploy_cluster_meta_info
