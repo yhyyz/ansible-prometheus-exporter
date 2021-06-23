@@ -90,7 +90,7 @@ def attach_role_policy_to_cluster(cluster_meta):
         # print(response)
 
 
-def create_ansilbe_master_policy():
+def create_ansilbe_master_policy(aws_region):
     client = boto3.client('iam')
     ansilbe_master_policy = {
         "Version": "2012-10-17",
@@ -207,6 +207,7 @@ def create_ansilbe_master_policy():
     print("associate ansible_deploy_profile to instance")
     res = requests.get("http://169.254.169.254/latest/meta-data/instance-id")
     instance_id = res.content
+    client = boto3.client('ec2',aws_region=aws_region)
     response = client.associate_iam_instance_profile(
         IamInstanceProfile={
             # 'Arn': 'string',
@@ -236,5 +237,5 @@ if __name__ == '__main__':
     print("write meta.json file")
     write_meta_file(cluster_meta)
     print("create role ansible master")
-    create_ansilbe_master_policy()
+    create_ansilbe_master_policy(args.aws_region)
 
