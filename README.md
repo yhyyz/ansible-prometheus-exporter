@@ -35,8 +35,17 @@
 #  EC2[Amazon Linux 2 RMI]一台， 作用如下:
 1. 在该EC2上安装Promtheus和Grafana
 2. 在该EC2上安装Ansible，通过ssh部署node_exporter和jmx_exporterd到EMR集群
+
 # 权限
-1. EC2 需要的权限运行task权限会自动添加，请确认该EC2有添加IAM管理权限
+1. EC2(ansible这台机器，非ERM机器)需要的权限运行task权限会自动添加，请确认该EC2有添加IAM管理权限
+2. 如果EC2(ansible这台机器，非ERM机器)上已经有Role，则不会修改权限。需要你手动在该EC2上加入权限，权限列表如下
+"ec2:DeleteTags",
+"ec2:CreateTags",
+"ec2:Describe*",
+"sqs:Get*",
+"sqs:List*",
+"elasticmapreduce:Describe*",
+"elasticmapreduce:List*"
 
 `EC2和EMR集群内网可通`
 ```
@@ -50,7 +59,7 @@
 │   ├── keys                     # 存放ssh key 的目录，里面两个空文件，把你的多个key放在此目录下
 │   ├── ansible.cfg              # ansibl 的全局配置文件
 │   ├── ape_playbook.yml         # ape[项目名称简写], 这个是部署Prometheus+Grafana+ape自身服务
-│   ├── aws_ec2.yml                                                    # 动态EC2 Inventory, 可以动态获取要部署的Instance
+│   ├── aws_ec2.yml							 # 动态EC2 Inventory, 可以动态获取要部署的Instance
 │   ├── exporter_playbook.yml    # 自动部署 node_exporter 和jmx_exporter
 │   ├── exporter_resize_playbook.yml    # 为emr resize 出来的节点自动部署 node_exporter 和jmx_exporter
 │   ├── autometa_playbook.yml    # 自动生成meta.json文件的任务
@@ -163,6 +172,7 @@ curl http://localhost:8500/v1/catalog/service/jmx_exporter_nm |jq .
 curl http://localhost:8500/v1/catalog/service/jmx_exporter_dn |jq .
 curl http://localhost:8500/v1/catalog/service/jmx_exporter_rm |jq .
 curl http://localhost:8500/v1/catalog/service/jmx_exporter_nm |jq .
+
 ```
 
 ##### 2.7 查看Metrics
@@ -209,8 +219,6 @@ jmx_exporter  根据你的Metrics需求在Grafana上配置即可
 ![](https://pcmyp.oss-accelerate.aliyuncs.com/markdown/20210605005126.png)
 
 ##### 3.2 Exporter 部署图示(部分截图)
-
-![](https://pcmyp.oss-accelerate.aliyuncs.com/markdown/20210623164017.png)
 
 ![](https://pcmyp.oss-accelerate.aliyuncs.com/markdown/20210605013553.png)
 
