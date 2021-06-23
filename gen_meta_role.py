@@ -106,7 +106,23 @@ def create_ansilbe_master_policy():
                     "sqs:GetQueueAttributes",
                     "sqs:GetQueueUrl",
                     "sqs:ListDeadLetterSourceQueues",
-                    "sqs:ListQueues"
+                    "sqs:ListQueues",
+                    "elasticmapreduce:DescribeCluster",
+                    "elasticmapreduce:DescribeEditor",
+                    "elasticmapreduce:DescribeJobFlows",
+                    "elasticmapreduce:DescribeSecurityConfiguration",
+                    "elasticmapreduce:DescribeStep",
+                    "elasticmapreduce:GetBlockPublicAccessConfiguration",
+                    "elasticmapreduce:GetManagedScalingPolicy",
+                    "elasticmapreduce:ListBootstrapActions",
+                    "elasticmapreduce:ListClusters",
+                    "elasticmapreduce:ListEditors",
+                    "elasticmapreduce:ListInstanceFleets",
+                    "elasticmapreduce:ListInstanceGroups",
+                    "elasticmapreduce:ListInstances",
+                    "elasticmapreduce:ListSecurityConfigurations",
+                    "elasticmapreduce:ListSteps",
+                    "elasticmapreduce:ViewEventsFromAllClustersInConsole"
                 ],
                 "Resource": "*"
             }
