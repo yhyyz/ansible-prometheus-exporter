@@ -1,13 +1,10 @@
 # ansible-prometheus-exporter
 
+
+
 [toc]
 
-### 更新记录
-#### 20200618
-* jmx exporter 加入serial参数，默认为1，表示每次执行一台机器，正常完毕后自动执行下一台。 在exporter_playbook.yml中配置
-* jmx exporter 加入wait_for任务，重启jmx进程后会等待端口可用，如果超时时间内不可用安装失败退出，等待超时时间(namenode:8020 超时300秒，datannode:50010 超时60秒，resourcemanager:8032 超时60秒, nodemanager:8041 超时60秒)
-
-### EMR  Monitor
+### EMR Monitor
 
 #### 一、背景
 
@@ -19,7 +16,7 @@
 
 ##### 1.2 实现目标
 
-1. 一键自动部署Prometheus+Grafana服务
+1. 一键自动部署Prometheus+Grafana+Consul服务
 2. 一键自动部署`expoter`到已运行的Instance
 3. Lambda事件触发自动部署`expoter`到`Resize`过程产生的Instance
 4. `exporter`部署完毕后，自动更新到`Prometheus`配置
@@ -40,15 +37,8 @@
 #  EC2[Amazon Linux 2 RMI]一台， 作用如下:
 1. 在该EC2上安装Promtheus和Grafana
 2. 在该EC2上安装Ansible，通过ssh部署node_exporter和jmx_exporterd到EMR集群
-
-# EC2 需要的权限如下，可以在Role添加如下权限，
-1. EMR 只读权限
-2. SQS 只读权限
-3. EC2 只读权限
-
-# EMR 集群的Role需要添加的权限，可以在EMR集群已有的Role中添加如下权限
-1. EC2 只读权限
-2. EC2 创建Tag的权限
+# 权限
+1. EC2 需要的权限运行task权限会自动添加，请确认该EC2有添加IAM管理权限
 
 `EC2和EMR集群内网可通`
 ```
@@ -62,8 +52,10 @@
 │   ├── keys                     # 存放ssh key 的目录，里面两个空文件，把你的多个key放在此目录下
 │   ├── ansible.cfg              # ansibl 的全局配置文件
 │   ├── ape_playbook.yml         # ape[项目名称简写], 这个是部署Prometheus+Grafana+ape自身服务
-│   ├── aws_ec2.yml							 # 动态EC2 Inventory, 可以动态获取要部署的Instance
+│   ├── aws_ec2.yml                                                    # 动态EC2 Inventory, 可以动态获取要部署的Instance
 │   ├── exporter_playbook.yml    # 自动部署 node_exporter 和jmx_exporter
+│   ├── exporter_resize_playbook.yml    # 为emr resize 出来的节点自动部署 node_exporter 和jmx_exporter
+│   ├── autometa_playbook.yml    # 自动生成meta.json文件的任务
 │   ├── roles                    # 将各个模块，以Ansible Role的方式封装
 │   │   ├── ape_sqs          # 集群Resize过程，触发Lambda消息发送到SQS,该服务消费SQS,安exporter
 │   │   ├── cloudalchemy.grafana # 在EC2安装Grafana，开源提供
@@ -72,6 +64,7 @@
 │   │   ├── jmx_exporter    # 部署jmx_exporter到EMR
 │   │   └── node_exporter   # 部署node_exporter到EMR
 │   ├── get_key.sh           # 根据集群名字，从meta获取ssh key
+│   ├── gen_meta_role.py     # 生成meta.json的脚本，同时会为部署添加相关IAM权限
 │   ├── meta.json           # 里面是配置信息，将EMR多个集群信息在这里配置
 │   └── reg_sd.py    #  exporter 安装完毕后触发更新Prometheus的scrape, 默认是注册到consul服务发现
 ```
@@ -90,6 +83,7 @@ source ./ansible_venv/bin/activate
 # 安装ansible 和boto3
 pip install ansible
 pip install boto3
+pip install requests
 ```
 
 ##### 2.4 代码下载及配置
@@ -99,29 +93,11 @@ pip install boto3
 git clone https://github.com/yhyyz/ansible-prometheus-exporter.git
 cd ansible-prometheus-exporter
 
-# 配置meta.json, 其内容格式如下
-{
-  "base": [
-    {
-      "cluster_id": "j-2Z16PYH1GWCDM", # 集群ID
-      "cluster_name": "test-monitor-005", # 集群名字
-      "ssh_user": "hadoop", # ssh user
-      "private_key": "emr-key.pem", # ssh key ,这里写key的名字，所有的key文件，放到keys目录下
-      "ip_type": "PrivateIpAddress", # 默认私有IP
-      "prometheus_sd_dir": "",   # 服务发现的方式，这是file_sd服务发现，空值不启用
-      "consul_address": "http://localhost:8500/v1/agent/service/register"  # consul 服务发现地址
-    },
-   ...... 可配置多个集群
-  ],
-  "aws_region": "ap-southeast-1",  # 指的是你的EMR在哪个Region下，里面默认的是 ap-southeast-1
-  "sqs_queue_name": "emr-state-queue.fifo"  # sqs 队列名称，这个就是EMR集群状态改变触发Lambda发送消息到SQS的Queue的名称，默认的是emr-state-queue.fifo,可以修改,之后创建Queue时，使用你修改的名字创建即可，这个会在部署Lambda时说明。
-}
-
 # 配置aws_ec2.yml
 # 这里面只需要配置一个参数Regions即可，默认是 ap-southeast-1, 可以执行如下命令替换,注意命令中修改为你自己的信息, 当然也可以vi 打开文件进行修改
 sed -i  's/ap-southeast-1/your-region/g' aws_ec2.yml
 
-# 将你访问的erm集群ssh key, 放到keys目录中，注意修改权限为500
+# 将你访问的emr集群ssh key, 放到keys目录中，注意修改权限为500. 需要注意的是如果meta信息是自动生成的，对于每个emr集群的key的名字，是通过API从EMR集群配置上获取的，请确保你的key和集群配置的key名字一致。
 ```
 
 ##### 2.5 部署APE
@@ -146,6 +122,9 @@ sudo systemctl status ape_sqs
 ##### 2.6 部署Exporter
 
 ```shell
+# 执行如下命令自动生成meta配置，执行后会让你输入相关参数值，其中参数已有默认值，如果不改变直接回车即可。 之后会列出所有的集群名字，让你输入要部署的集群名字，输入后回车即可，该playbook执行完毕后，会自动生成meta.json，同时权限也会自动配置好。
+ansible-playbook --connection=local  -i  localhost, -u ec2-user  atuometa_playbook.yml
+
 # 执行如下命令可以查看到你现有的集群实例
 ansible-inventory -i aws_ec2.yml --graph
 # 上述命令的输出结果类似如下, 下面地址有公网显示公网，无公网显示私网，无论显示什么，在ssh连接时配置中指定的是私网连接
@@ -168,13 +147,12 @@ ansible-inventory -i aws_ec2.yml --graph
 
 # 执行如下命令可以向节点部署node_exporter和jvm_exporter, 该命令中注意 --limit 参数的值，就是上述命令输出结果的@之后的值， 这其实是给集群安装CORE，MASTER，TASK 节点分了组，执行安装命令是可以按组安装，也可以指定单台机器按照。 最好先指定单台机器按照，一切OK，在按组批量安装。
 
-# 单台机器安装， 注意ip后的逗号不能省略, 注意get_key.sh 后边的参数就是你要部署的emr集群的名字，我这里是test-monitor-005, 注意替换为你的名字。 --extra-vars 里面的deploy_cluster_id后面的参数，是集群的ID，注意替换为你自己的集群ID
-
-ansible-playbook -i  172.31.3.16,  -u hadoop  --private-key `sh ./get_key.sh test-monitor-005` --extra-vars "deploy_cluster_id=j-2Z16PYH1GWCDM" exporter_playbook.yml
+# 单台机器安装， 注意ip后的逗号不能省略
+ansible-playbook -i  172.31.3.16, -u hadoop  exporter_playbook.yml
 
 # 按Tag 分组安装命令如下，注意替换limit的值，为你自己的值，最好先执行单台安装测试
 # 需要强调的是，jmx exporter的部署是需要重启JVM进程的，尤其Master节点上的Namenode进程和ResourceManager进程重启，你的集群会处于不可用状态。
-ansible-playbook -i aws_ec2.yml -u hadoop  --private-key `sh ./get_key.sh test-monitor-005` --extra-vars "deploy_cluster_id=j-2Z16PYH1GWCDM" --limit     emr_flow_role___j_KO4KLWAKC4GZ____TASK__ exporter_playbook.yml
+ansible-playbook -i aws_ec2.yml -u hadoop  --limit     emr_flow_role___j_KO4KLWAKC4GZ____TASK__ exporter_playbook.yml
 
 # 安装执行完毕后，可以通过如下命令测试
 # node_exporter metrics
@@ -253,4 +231,3 @@ jmx_exporter  根据你的Metrics需求在Grafana上配置即可
 2. 以上部署方案只是和客户探讨沟通的解决方案，方案实施是需要客户做根据环境做进一步测试和调整的，不能不经过测试，直接就上生产环境。
 3. 当前代码只是V1版本，可根据客户测试及使用，双方共同解决BUG及功能升级。
 4. 再次强调，对应jmx_exporter的安装是会自动重启JVM的，node_exporter不影响集群服务。
-```

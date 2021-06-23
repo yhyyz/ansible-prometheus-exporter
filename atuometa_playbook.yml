@@ -7,9 +7,21 @@
       prompt: "Enter AWS Region,default:"
       private: no
       default: 'ap-southeast-1'
+    - name: "consul_address"
+      prompt: "Enter your consul_address,default:"
+      private: no
+      default: "http://localhost:8500/v1/agent/service/register"
+    - name: "ssh_user"
+      prompt: "Enter your ssh user,default:"
+      private: no
+      default: "hadoop"
+    - name: "sqs_queue_name"
+      prompt: "Enter your ssh user,default:"
+      private: no
+      default: "emr-state-queue.fifo"
   tasks:
     - name: gen mata json and set role for deploy
-      shell: python gen_meta_role.py -a "{{ aws_region }}"
+      shell: python gen_meta_role.py -a "{{ aws_region }}" -s "{{ssh_user}}" -c "{{consul_address}}"  -q "{{sqs_queue_name }}"
     - name: get meta info
       shell: cat meta.json |jq -c -r .base[].cluster_name
       register: __meta_cluster_name
