@@ -207,8 +207,8 @@ def create_ansilbe_master_policy(aws_region):
     print("associate ansible_deploy_profile to instance")
     res = requests.get("http://169.254.169.254/latest/meta-data/instance-id")
     instance_id = res.content
-    client = boto3.client('ec2',aws_region=aws_region)
-    response = client.associate_iam_instance_profile(
+    ec2_client = boto3.client('ec2',region_name=aws_region)
+    response = ec2_client.associate_iam_instance_profile(
         IamInstanceProfile={
             # 'Arn': 'string',
             'Name': 'ansible_deploy_profile'
