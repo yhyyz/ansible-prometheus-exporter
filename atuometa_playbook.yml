@@ -1,0 +1,37 @@
+- name: prompt aws_region
+  hosts: all
+  connection: local
+  gather_facts: no
+  vars_prompt:
+    - name: "aws_region"
+      prompt: "Enter AWS Region,default:"
+      private: no
+      default: 'ap-southeast-1'
+  tasks:
+    - name: gen mata json and set role for deploy
+      shell: python gen_meta_role.py -a "{{ aws_region }}"
+    - name: get meta info
+      shell: cat meta.json |jq -c -r .base[].cluster_name
+      register: __meta_cluster_name
+    - name: set fact cluster_name
+      set_fact:
+          meta_cluster_name: "{{ __meta_cluster_name.stdout }}"
+- name: prompt deploy cluster_name
+  hosts: all
+  connection: local
+  vars_prompt:
+    - name: "emr_deploy_cluster"
+      private: no
+      prompt: "Enter the cluster name from :\n{{ hostvars['localhost']['meta_cluster_name'] }}\n"
+  tasks:
+    - name: get deploy cluster meta info
+      shell: sh get_key.sh {{emr_deploy_cluster}}
+      register: __deploy_cluster_meta_info
+    - debug: var=__deploy_cluster_meta_info
+    - name: write config
+      shell: |
+          echo "# auto gen extra vars" > extra_vars.yml
+          echo "ansible_ssh_private_key_file: {{ __deploy_cluster_meta_info.stdout_lines[1]  }}" >> extra_vars.yml
+          echo "deploy_cluster_id: {{ __deploy_cluster_meta_info.stdout_lines[2]  }}" >> extra_vars.yml
+  tags:
+      - gen_meta_json
