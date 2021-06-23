@@ -23,7 +23,7 @@
     - name: gen mata json and set role for deploy
       shell: python gen_meta_role.py -a "{{ aws_region }}" -s "{{ssh_user}}" -c "{{consul_address}}"  -q "{{sqs_queue_name }}"
     - name: get meta info
-      shell: cat meta.json |jq -c -r .base[].cluster_name
+      shell: cat meta.json |jq -c -r  '.base[] | .cluster_name + "(" + .cluster_id +")"'
       register: __meta_cluster_name
     - name: set fact cluster_name
       set_fact:

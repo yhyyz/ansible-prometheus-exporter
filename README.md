@@ -1,7 +1,5 @@
 # ansible-prometheus-exporter
 
-
-
 [toc]
 
 ### EMR Monitor
@@ -122,7 +120,7 @@ sudo systemctl status ape_sqs
 ##### 2.6 部署Exporter
 
 ```shell
-# 执行如下命令自动生成meta配置，执行后会让你输入相关参数值，其中参数已有默认值，如果不改变直接回车即可。 之后会列出所有的集群名字，让你输入要部署的集群名字，输入后回车即可，该playbook执行完毕后，会自动生成meta.json，同时权限也会自动配置好。
+# 执行如下命令自动生成meta配置，执行后会让你输入相关参数值，其中参数已有默认值，如果不改变直接回车即可。 之后会列出所有的集群名字，让你输入要部署的集群名字，输入后回车即可，该playbook执行完毕后，会自动生成meta.json，权限也会自动配置好。同时会生成一个extra_vars.yml文件，这个文件中变量信息会提供给exporter_playbook.yml使用。 注意部署不同的集群请重新执行下面命令。
 ansible-playbook --connection=local  -i  localhost, -u ec2-user  atuometa_playbook.yml
 
 # 执行如下命令可以查看到你现有的集群实例
@@ -145,7 +143,7 @@ ansible-inventory -i aws_ec2.yml --graph
   |  |--172.31.3.16
   |--@ungrouped:
 
-# 执行如下命令可以向节点部署node_exporter和jvm_exporter, 该命令中注意 --limit 参数的值，就是上述命令输出结果的@之后的值， 这其实是给集群安装CORE，MASTER，TASK 节点分了组，执行安装命令是可以按组安装，也可以指定单台机器按照。 最好先指定单台机器按照，一切OK，在按组批量安装。
+# 执行如下命令可以向节点部署node_exporter和jvm_exporter, 该命令中注意 --limit 参数的值，就是上述命令输出结果的@之后的值， 这其实是给集群安装CORE，MASTER，TASK 节点分了组，执行安装命令是可以按组安装，也可以指定单台机器按照。 最好先指定单台机器按照，一切OK，再按组批量安装。
 
 # 单台机器安装， 注意ip后的逗号不能省略
 ansible-playbook -i  172.31.3.16, -u hadoop  exporter_playbook.yml
