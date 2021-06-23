@@ -215,6 +215,7 @@ jmx_exporter  根据你的Metrics需求在Grafana上配置即可
 ![](https://pcmyp.oss-accelerate.aliyuncs.com/markdown/20210605021108.png)
 
 ##### 3.3 Metrics(部分截图)
+![](https://pcmyp.oss-accelerate.aliyuncs.com/markdown/20210623164017.png)
 
 ![](https://pcmyp.oss-accelerate.aliyuncs.com/markdown/20210605020120.png)
 
