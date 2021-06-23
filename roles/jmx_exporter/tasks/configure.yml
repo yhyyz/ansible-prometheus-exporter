@@ -69,7 +69,7 @@
       export HDFS_NAMENODE_OPTS=" -javaagent:{{ _jmx_exporter_jar_install_dir }}/{{ jmx_exporter_signature }}={{jmx_nn_prometheus_port}}:/etc/jmx_exporter/hdfs_nn_jmx_config.yaml"
   notify:
     - restart namenode
-#  changed_when: true
+  changed_when: force_export_opt_nn
   when: "'skipped' not in nn_jmx_conf or force_export_opt_nn"
 
 - name: add java opts to datanode
@@ -80,7 +80,7 @@
       export HADOOP_DATANODE_OPTS=" -javaagent:{{ _jmx_exporter_jar_install_dir }}/{{ jmx_exporter_signature }}={{jmx_dn_prometheus_port}}:/etc/jmx_exporter/hdfs_dn_jmx_config.yaml"
   notify:
     - restart datanode
-#  changed_when: true
+  changed_when: force_export_opt_dn
   when: "'skipped' not in dn_jmx_conf or force_export_opt_dn"
 
 - name: add java opts to resourcemanager
@@ -91,7 +91,7 @@
       export YARN_RESOURCEMANAGER_OPTS=" -javaagent:{{ _jmx_exporter_jar_install_dir }}/{{ jmx_exporter_signature }}={{jmx_rm_prometheus_port}}:/etc/jmx_exporter/yarn_rm_jmx_config.yaml"
   notify:
     - restart resourcemanager
-#  changed_when: true
+  changed_when: force_export_opt_rm
   when:  "'skipped' not in rm_jmx_conf or force_export_opt_rm "
 
 - name: add java opts to nodemanager
@@ -102,5 +102,5 @@
       export YARN_NODEMANAGER_OPTS=" -javaagent:{{ _jmx_exporter_jar_install_dir }}/{{ jmx_exporter_signature }}={{jmx_nm_prometheus_port}}:/etc/jmx_exporter/yarn_nm_jmx_config.yaml"
   notify:
     - restart nodemanager
-#  changed_when: true
+  changed_when: force_export_opt_nm
   when: "'skipped' not in nm_jmx_conf or  force_export_opt_nm"
