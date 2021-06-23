@@ -206,15 +206,21 @@ def create_ansilbe_master_policy(aws_region):
 
     print("associate ansible_deploy_profile to instance")
     res = requests.get("http://169.254.169.254/latest/meta-data/instance-id")
-    instance_id = res.content
+    instance_id = res.text
     ec2_client = boto3.client('ec2',region_name=aws_region)
-    response = ec2_client.associate_iam_instance_profile(
-        IamInstanceProfile={
-            # 'Arn': 'string',
-            'Name': 'ansible_deploy_profile'
-        },
-        InstanceId=str(instance_id)
-    )
+    try:
+        response = ec2_client.associate_iam_instance_profile(
+            IamInstanceProfile={
+                # 'Arn': 'string',
+                'Name': 'ansible_deploy_profile'
+            },
+            InstanceId=str(instance_id)
+        )
+    except ClientError as e:
+        if e.response['Error']['Code'] == 'IncorrectState':
+            print("existing association for instance")
+        else:
+            print("Unexpected error: %s" % e)
 
 
 if __name__ == '__main__':
