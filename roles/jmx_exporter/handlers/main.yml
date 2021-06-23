@@ -8,7 +8,7 @@
   when:
     - not ansible_check_mode
 
-- name: Wait for namenode port  "{{ wait_for_port_nn }}"
+- name: Wait for namenode port ok"
   wait_for:
     host: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
     port: "{{ wait_for_port_nn }}"
@@ -28,7 +28,7 @@
   when:
     - not ansible_check_mode
 
-- name: Wait for datanode port "{{ wait_for_port_dn }}"
+- name: Wait for datanode port ok
   wait_for:
     host: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
     port: "{{ wait_for_port_dn }}"
@@ -48,7 +48,7 @@
   when:
     - not ansible_check_mode
 
-- name: Wait for resourcemanager port {{ wait_for_port_rm }}
+- name: Wait for resourcemanager port ok
   wait_for:
     host: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
     port: "{{ wait_for_port_rm }}"
@@ -68,7 +68,7 @@
   when:
     - not ansible_check_mode
 
-- name: Wait for nodemanager port  "{{ wait_for_port_nm }}"
+- name: Wait for nodemanager port  ok
   wait_for:
     host: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
     port: "{{ wait_for_port_nm }}"
