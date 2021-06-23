@@ -23,10 +23,10 @@
     - "{{ lookup('env', 'PWD') }}/extra_vars.yml"
   vars:
     jmx_exporter_version: 0.15.0
-    force_export_opt_nn: false
-    force_export_opt_dn: false
-    force_export_opt_rm: false
-    force_export_opt_nm: false
+    force_export_opt_nn: true
+    force_export_opt_dn: true
+    force_export_opt_rm: true
+    force_export_opt_nm: true
     wait_for_port_nn: 8020
     wait_for_port_dn: 50010
     wait_for_port_rm: 8032
