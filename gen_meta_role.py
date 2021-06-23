@@ -213,7 +213,7 @@ def create_ansilbe_master_policy(aws_region):
             # 'Arn': 'string',
             'Name': 'ansible_deploy_profile'
         },
-        InstanceId=instance_id
+        InstanceId=str(instance_id)
     )
 
 
