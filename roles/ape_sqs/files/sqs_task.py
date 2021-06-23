@@ -26,7 +26,8 @@ def event_handler(aws_region,event,meta_base,private_key_path):
                 if base["cluster_id"] == cluster_id:
                     ssh_user = base["ssh_user"]
                     private_key = base["private_key"]
-            cli = PlaybookCLI([" ", '-i', hosts, '-u', ssh_user, '--private-key', private_key_path+"/"+private_key, "--extra-vars", "deploy_cluster_id="+cluster_id, "exporter_playbook.yml"])
+                    break
+            cli = PlaybookCLI([" ", '-i', hosts, '-u', ssh_user, '--private-key', private_key_path+"/"+private_key, "--extra-vars", "deploy_cluster_id="+cluster_id, private_key_path.replace("/keys","/")+"exporter_resize_playbook.yml"])
             results = cli.run()
             if results == 0:
                 is_ok = True

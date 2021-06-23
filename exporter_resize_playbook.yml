@@ -1,0 +1,40 @@
+- name: Deploy node_exporter
+  hosts: all
+  serial: 1
+  roles:
+    - node_exporter
+  vars:
+    python_venv_execute: "/usr/local/venv/ape-venv/bin/python"
+    update_scrape_script: "{{ lookup('env', 'PWD') }}/reg_sd.py"
+    node_exporter_version: 1.1.1
+    meta_json_file: "{{ lookup('env', 'PWD') }}/meta.json"
+    deploy_cluster_id: "{{ deploy_cluster_id }}"
+  tags:
+    - node_exporter
+  tasks:
+    - debug: var=deploy_cluster_id
+
+- name: Deploy jmx_exporter
+  hosts: all
+  serial: 1
+  vars:
+    jmx_exporter_version: 0.15.0
+    force_export_opt_nn: false
+    force_export_opt_dn: false
+    force_export_opt_rm: false
+    force_export_opt_nm: false
+    wart_for_port_nn: 8020
+    wart_for_port_dn: 50010
+    wart_for_port_rm: 8032
+    wart_for_port_nm: 8041
+    python_venv_execute: "/usr/local/venv/ape-venv/bin/python"
+    update_scrape_script: "{{ lookup('env', 'PWD') }}/reg_sd.py"
+    meta_json_file: "{{ lookup('env', 'PWD') }}/meta.json"
+    deploy_cluster_id: "{{ deploy_cluster_id }}"
+    re_tag: true
+  roles:
+    - jmx_exporter
+  tags:
+    - jmx_exporter
+
+
