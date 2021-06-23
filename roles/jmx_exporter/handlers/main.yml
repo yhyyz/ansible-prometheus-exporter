@@ -28,7 +28,7 @@
   when:
     - not ansible_check_mode
 
-- name: Wait for datanode port  "{{ wait_for_port_dn }}"
+- name: Wait for datanode port "{{ wait_for_port_dn }}"
   wait_for:
     host: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
     port: "{{ wait_for_port_dn }}"
@@ -48,7 +48,7 @@
   when:
     - not ansible_check_mode
 
-- name: Wait for resourcemanager port  "{{ wait_for_port_rm }}"
+- name: Wait for resourcemanager port "{{ wait_for_port_rm }}"
   wait_for:
     host: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
     port: "{{ wait_for_port_rm }}"
@@ -58,7 +58,11 @@
   listen: restart resourcemanager
   when:
     - not ansible_check_mode
+
 - debug: var=hostvars[inventory_hostname]['ansible_default_ipv4']['address']
+  listen: restart resourcemanager
+- debug: var=wait_for_port_rm
+  listen: restart resourcemanager
 
 - name: restart nodemanager
   become: true
