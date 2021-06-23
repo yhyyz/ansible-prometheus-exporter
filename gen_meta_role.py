@@ -216,8 +216,6 @@ def create_ansilbe_master_policy():
     )
 
 
-
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Please input params')
     parser.add_argument("-a", "--aws_region", default="ap-southeast-1")
@@ -238,5 +236,5 @@ if __name__ == '__main__':
     print("write meta.json file")
     write_meta_file(cluster_meta)
     print("create role ansible master")
-    # create_ansilbe_master_policy()
+    create_ansilbe_master_policy()
 
