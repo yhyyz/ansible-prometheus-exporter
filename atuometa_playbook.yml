@@ -16,7 +16,7 @@
       private: no
       default: "hadoop"
     - name: "sqs_queue_name"
-      prompt: "Enter your ssh user,default:"
+      prompt: "Enter your sqs queue,default:"
       private: no
       default: "emr-state-queue.fifo"
   tasks:
