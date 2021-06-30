@@ -25,9 +25,6 @@
     - name: get meta info
       shell: cat meta.json |jq -c -r  '.base[] | .cluster_name + "(" + .cluster_id +")"'
       register: __meta_cluster_name
-    - name: set fact cluster_name
-      set_fact:
-          meta_cluster_name: "{{ __meta_cluster_name.stdout }}"
     - name: meta json update then restart ape_sqs
       become: true
       connection: local
@@ -37,7 +34,9 @@
         state: restarted
       when:
         - not ansible_check_mode
-
+    - name: set fact cluster_name
+      set_fact:
+          meta_cluster_name: "{{ __meta_cluster_name.stdout }}"
 - name: prompt deploy cluster_name
   hosts: all
   connection: local
