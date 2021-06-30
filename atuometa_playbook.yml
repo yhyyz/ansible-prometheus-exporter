@@ -28,16 +28,16 @@
     - name: set fact cluster_name
       set_fact:
           meta_cluster_name: "{{ __meta_cluster_name.stdout }}"
-- name: meta json update then restart ape_sqs
-  become: true
-  connection: local
-  systemd:
-    daemon_reload: true
-    name: ape_sqs
-    state: restarted
-  when:
-    - not ansible_check_mode
-    -
+    - name: meta json update then restart ape_sqs
+      become: true
+      connection: local
+      systemd:
+        daemon_reload: true
+        name: ape_sqs
+        state: restarted
+      when:
+        - not ansible_check_mode
+
 - name: prompt deploy cluster_name
   hosts: all
   connection: local
