@@ -28,10 +28,15 @@
   when:
     - not ansible_check_mode
 
+- name: get datanode hadoop version
+  shell: "hadoop version |head -1 |awk '{print $2}'|cut -c 1 |awk '{if($1==3) print 9866; else if($1==2) print 50010}'"
+  register: __datanode_hadoop_version
+  listen: restart datanode
+
 - name: Wait for datanode port ok
   wait_for:
     host: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
-    port: "{{ wait_for_port_dn }}"
+    port: "{{ __datanode_hadoop_version.stdout }}"
     delay: 10
     sleep: 3
     timeout: 60

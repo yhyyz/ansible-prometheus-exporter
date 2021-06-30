@@ -28,6 +28,7 @@
     force_export_opt_rm: false
     force_export_opt_nm: false
     wait_for_port_nn: 8020
+    # 50010 for hadoop 2.x 9866 for hadoop 3.x auto
     wait_for_port_dn: 50010
     wait_for_port_rm: 8032
     wait_for_port_nm: 8041
