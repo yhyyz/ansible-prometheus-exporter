@@ -5,9 +5,17 @@ import time
 import sys
 import requests
 
+from botocore.config import Config
+
+config = Config(
+   retries={
+      'max_attempts': 100,
+      'mode': 'adaptive'  # adaptive standard
+   }
+)
 
 def gen_exporter_instance_sd(aws_region,exporter_tag, tag_value, ip_type, cluster_id):
-    ec2_client = boto3.client('ec2', region_name=aws_region)
+    ec2_client = boto3.client('ec2', config=config,region_name=aws_region)
     ip_list = []
     ec2_response = ec2_client.describe_instances(
         Filters=[

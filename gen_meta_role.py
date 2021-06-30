@@ -5,9 +5,17 @@ import json
 import argparse
 import requests
 
+from botocore.config import Config
+
+config = Config(
+   retries={
+      'max_attempts': 100,
+      'mode': 'adaptive'  # adaptive standard
+   }
+)
 
 def get_emr_cluster_meta(aws_region, ssh_user, ip_type, prometheus_sd_dir, consul_address, sqs_queue_name):
-    client = boto3.client('emr', region_name=aws_region)
+    client = boto3.client('emr', config=config,region_name=aws_region)
     response = client.list_clusters(
         ClusterStates=[
             'RUNNING', 'WAITING',
@@ -57,7 +65,7 @@ def create_emr_ec2_policy():
             }
         ]
     }
-    client = boto3.client('iam')
+    client = boto3.client('iam',config=config)
     try:
         response = client.create_policy(
             PolicyName='ansible_ec2_tag',
@@ -74,7 +82,7 @@ def create_emr_ec2_policy():
 
 
 def attach_role_policy_to_cluster(cluster_meta):
-    client = boto3.client('iam')
+    client = boto3.client('iam',config=config)
     ansible_ec2_tag_policy = client.list_policies(
         Scope='All',
         OnlyAttached=False,
@@ -91,7 +99,7 @@ def attach_role_policy_to_cluster(cluster_meta):
 
 
 def create_ansilbe_master_policy(aws_region):
-    client = boto3.client('iam')
+    client = boto3.client('iam',config=config)
     ansilbe_master_policy = {
         "Version": "2012-10-17",
         "Statement": [
@@ -207,7 +215,7 @@ def create_ansilbe_master_policy(aws_region):
     print("associate ansible_deploy_profile to instance")
     res = requests.get("http://169.254.169.254/latest/meta-data/instance-id")
     instance_id = res.text
-    ec2_client = boto3.client('ec2',region_name=aws_region)
+    ec2_client = boto3.client('ec2',config=config,region_name=aws_region)
     try:
         response = ec2_client.associate_iam_instance_profile(
             IamInstanceProfile={
@@ -236,12 +244,12 @@ if __name__ == '__main__':
     print("gen cluster meta")
     cluster_meta = get_emr_cluster_meta(args.aws_region, args.ssh_user, args.ip_type,
                                         args.prometheus_sd_dir, args.consul_address, args.sqs_queue_name)
+    print("write meta.json file")
+    write_meta_file(cluster_meta)
     print("create policy ansible_ec2_tag")
     create_emr_ec2_policy()
     print("attach role to cluster")
     attach_role_policy_to_cluster(cluster_meta)
-    print("write meta.json file")
-    write_meta_file(cluster_meta)
     print("create role ansible master")
     create_ansilbe_master_policy(args.aws_region)
 

@@ -152,3 +152,4 @@ fabric.properties
 emr-key-s.pem
 keys/emr-01.pem
 extra_vars.yml
+tmp.py
