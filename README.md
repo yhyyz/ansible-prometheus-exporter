@@ -4,6 +4,18 @@
 
 ### EMR Monitor
 
+#### 更新
+
+##### 2021-07-01
+
+```
+1. boto3 api rate limit,采用adaptive retry mode
+2. consul meta tags 包含集群ID，名称 ，exporter名称 用于relable
+3. hadoop3.x , 2.x datanode port 检查切换(3.x 9866, 2.x 50010)
+```
+
+
+
 #### 一、背景
 
 `给客户的文档一般都是将当前文档转换为PDF交给客户，因此这里的文档更新,可能不会及时同步到客户，客户可以在这里看到最新文档说明, 客户部署时按照这里文档说明部署即可`
@@ -37,7 +49,16 @@
 2. 在该EC2上安装Ansible，通过ssh部署node_exporter和jmx_exporterd到EMR集群
 
 # 权限
-1. EC2(ansible这台机器，非ERM机器)需要的权限运行task权限会自动添加，请确认该EC2有添加IAM管理权限
+1. EC2(ansible这台机器，非ERM机器)需要的权限运行task权限会自动添加(自动添加EMR机器所需要权限)，`需要注意的是，你使用的的aws用户，至少要有以下权限`
+"iam:CreatePolicy",
+"iam:ListPolicies",
+"iam:CreateInstanceProfile",
+"iam:PassRole",
+"iam:CreateRole",
+"iam:AttachRolePolicy",
+"iam:AddRoleToInstanceProfile",
+"ec2:AssociateIamInstanceProfile"
+
 2. 如果EC2(ansible这台机器，非ERM机器)上已经有Role，则不会修改权限。需要你手动在该EC2上加入权限，权限列表如下
 "ec2:DeleteTags",
 "ec2:CreateTags",
@@ -97,6 +118,7 @@ pip install requests
 
 ```shell
 # 下载代码
+sudo yum install -y  git
 git clone https://github.com/yhyyz/ansible-prometheus-exporter.git
 cd ansible-prometheus-exporter
 
