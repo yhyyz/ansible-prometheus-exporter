@@ -6,6 +6,41 @@
 
 #### 更新
 
+##### 2021-07-02
+
+`relable 怎么配置`
+
+```yaml
+global:
+  evaluation_interval: 15s
+  scrape_interval: 15s
+  scrape_timeout: 10s
+scrape_configs:
+  - consul_sd_configs:
+    - server: localhost:8500
+    job_name: consul_sd
+    relabel_configs:
+     - source_labels:
+       - __meta_consul_tags
+       regex: ^\,([^\.]+)\,([^\.]+)\,([^\.]+)\,$
+       replacement: "${1}"
+       target_label: cluster_id
+     - source_labels:
+       - __meta_consul_tags
+       regex: ^\,([^\.]+)\,([^\.]+)\,([^\.]+)\,$
+       replacement: "${2}"
+       target_label: cluster_name
+     - source_labels:
+       - __meta_consul_tags
+       regex: ^\,([^\.]+)\,([^\.]+)\,([^\.]+)\,$
+       replacement: "${3}"
+       target_label: exporter_name
+```
+
+`结果是什么样`
+
+![](https://pcmyp.oss-accelerate.aliyuncs.com/markdown/20210701225905.png)
+
 ##### 2021-07-01
 
 ```
@@ -261,3 +296,4 @@ jmx_exporter  根据你的Metrics需求在Grafana上配置即可
 2. 以上部署方案只是和客户探讨沟通的解决方案，方案实施是需要客户做根据环境做进一步测试和调整的，不能不经过测试，直接就上生产环境。
 3. 当前代码只是V1版本，可根据客户测试及使用，双方共同解决BUG及功能升级。
 4. 再次强调，对应jmx_exporter的安装是会自动重启JVM的，node_exporter不影响集群服务。
+
