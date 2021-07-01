@@ -16,30 +16,35 @@ config = Config(
 
 def get_emr_cluster_meta(aws_region, ssh_user, ip_type, prometheus_sd_dir, consul_address, sqs_queue_name):
     client = boto3.client('emr', config=config,region_name=aws_region)
-    response = client.list_clusters(
+    paginator = client.get_paginator('list_clusters')
+    clusters_resp = paginator.paginate(
         ClusterStates=[
-            'RUNNING', 'WAITING',
-        ]
+            'WAITING'
+        ],
+        PaginationConfig={
+            'MaxItems': 5000,
+        }
     )
     cluster_list = []
-    for cluster in response["Clusters"]:
-        cluster_id = cluster["Id"]
-        cluster_name = cluster["Name"]
-        describe_response = client.describe_cluster(
-            ClusterId=cluster_id
-        )
-        keyName = describe_response["Cluster"]["Ec2InstanceAttributes"]["Ec2KeyName"]
-        ServiceRole = describe_response["Cluster"]["ServiceRole"]
-        cluster_info = {"cluster_id": cluster_id,
-                        "cluster_name": cluster_name,
-                        "private_key": keyName + ".pem",
-                        "ssh_user": ssh_user,
-                        "ip_type": ip_type,
-                        "prometheus_sd_dir": prometheus_sd_dir,
-                        "consul_address": consul_address,
-                        "service_role": ServiceRole
-                        }
-        cluster_list.append(cluster_info)
+    for page in clusters_resp:
+        for cluster in page["Clusters"]:
+            cluster_id = cluster["Id"]
+            cluster_name = cluster["Name"]
+            describe_response = client.describe_cluster(
+                ClusterId=cluster_id
+            )
+            keyName = describe_response["Cluster"]["Ec2InstanceAttributes"]["Ec2KeyName"]
+            ServiceRole = describe_response["Cluster"]["ServiceRole"]
+            cluster_info = {"cluster_id": cluster_id,
+                            "cluster_name": cluster_name,
+                            "private_key": keyName + ".pem",
+                            "ssh_user": ssh_user,
+                            "ip_type": ip_type,
+                            "prometheus_sd_dir": prometheus_sd_dir,
+                            "consul_address": consul_address,
+                            "service_role": ServiceRole
+                            }
+            cluster_list.append(cluster_info)
     meta = {"base": cluster_list, "aws_region": aws_region, "sqs_queue_name": sqs_queue_name}
     return meta
 
