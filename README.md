@@ -9,7 +9,7 @@
 ##### 2021-07-11
 
 ```markdown
-# 修复由于自动metadata生产造成的resize不触发，同时设定从sqs消费数据，设置可见性超时为600s
+# 修复由于自动metadata生产造成的resize不触发，同时设定从sqs数据的可见性超时为600s
 1. 需要重新生产meta信息，即执行 ansible-playbook --connection=local  -i  localhost, -u ec2-user  atuometa_playbook.yml
 2. 需要重新部署ape_sqs ,即执行 ansible-playbook --connection=local  -i  localhost, -u ec2-user  --tags "ape_sqs" ape_playbook.yml
 
