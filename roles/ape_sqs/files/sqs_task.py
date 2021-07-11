@@ -8,7 +8,7 @@ import sys
 import time
 
 
-def event_handler(aws_region,event,meta_base,private_key_path):
+def event_handler(aws_region,event,meta_base,private_key_path,project_path):
     is_ok = False
 
     try:
@@ -27,7 +27,7 @@ def event_handler(aws_region,event,meta_base,private_key_path):
                     ssh_user = base["ssh_user"]
                     private_key = base["private_key"]
                     break
-            cli = PlaybookCLI([" ", '-i', hosts, '-u', ssh_user, '--private-key', private_key_path+"/"+private_key, "--extra-vars", "deploy_cluster_id="+cluster_id, private_key_path.replace("/keys","/")+"exporter_resize_playbook.yml"])
+            cli = PlaybookCLI([" ", '-i', hosts, '-u', ssh_user, '--private-key', private_key_path+"/"+private_key, "--extra-vars", "deploy_cluster_id="+cluster_id+",update_scrape_script="+project_path+"/reg_sd.py,meta_json_file="+project_path+"/meta.json", private_key_path.replace("/keys","/")+"exporter_resize_playbook.yml"])
             results = cli.run()
             if results == 0:
                 is_ok = True
@@ -130,6 +130,7 @@ def process_msg(meta,private_key_path):
     meta_base = meta["base"]
     aws_region = meta["aws_region"]
     sqs_queue_name = meta["sqs_queue_name"]
+    project_path = meta["project_path"]
     sqs = boto3.resource('sqs',region_name=aws_region)
     while 1:
         try:
@@ -148,7 +149,7 @@ def process_msg(meta,private_key_path):
                 print(message.body)
                 event = json.loads(message.body)
                 # print(event)
-                res = event_handler(aws_region,event,meta_base,private_key_path)
+                res = event_handler(aws_region,event,meta_base,private_key_path,project_path)
                 if res:
                     print("delete msg")
                     message.delete()

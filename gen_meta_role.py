@@ -4,6 +4,7 @@ from botocore.exceptions import ClientError
 import json
 import argparse
 import requests
+import os
 
 from botocore.config import Config
 
@@ -45,7 +46,8 @@ def get_emr_cluster_meta(aws_region, ssh_user, ip_type, prometheus_sd_dir, consu
                             "service_role": ServiceRole
                             }
             cluster_list.append(cluster_info)
-    meta = {"base": cluster_list, "aws_region": aws_region, "sqs_queue_name": sqs_queue_name}
+    project_path = os.path.split(os.path.realpath(__file__))[0]
+    meta = {"base": cluster_list, "aws_region": aws_region, "sqs_queue_name": sqs_queue_name,"project_path": project_path}
     return meta
 
 
