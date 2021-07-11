@@ -19,6 +19,8 @@ strict_permissions: False
 keyed_groups:
   - key: tags['aws:elasticmapreduce:job-flow-id'],tags['aws:elasticmapreduce:instance-group-role']
     prefix: emr-flow-role
+  - key: tags['aws:elasticmapreduce:job-flow-id']
+    prefix: emr-flow
 
 
 # hostnames
