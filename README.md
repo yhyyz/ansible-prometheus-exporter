@@ -6,6 +6,17 @@
 
 #### 更新
 
+##### 2021-07-11
+
+```markdown
+# 修复由于自动metadata生产造成的resize不触发，同时设定从sqs消费数据，设置可见性超时为600s
+1. 需要重新生产meta信息，即执行 ansible-playbook --connection=local  -i  localhost, -u ec2-user  atuometa_playbook.yml
+2. 需要重新部署ape_sqs ,即执行 ansible-playbook --connection=local  -i  localhost, -u ec2-user  --tags "ape_sqs" ape_playbook.yml
+
+# ec2 inventory 增加按集群分组
+1. 执行 ansible-inventory -i aws_ec2.yml --graph ,可以看到按集群id分的组，如果部署时直接复制此分组ID，将会部署集群中的所有类型机器[`master`,`core`,`task`],注意这很危险，因为jmx部署会重启master上NameNode和ResourceManager。
+```
+
 ##### 2021-07-02
 
 `relable 怎么配置`
