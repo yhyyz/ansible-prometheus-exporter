@@ -14,7 +14,7 @@ def event_handler(aws_region,event,meta_base,private_key_path):
     try:
         if is_resize_complete(event):
             cluster_id = event['detail']["clusterId"]
-            untaged_ins = get_untaged_instances(aws_region,cluster_id)
+            untaged_ins = get_untaged_instances(aws_region,cluster_id,meta_base)
             if len(untaged_ins) == 0:
                 print("no untaged instance")
                 return True
@@ -52,7 +52,12 @@ def is_resize_complete(event):
         return False
 
 
-def get_untaged_instances(aws_region,cluster_id):
+def get_untaged_instances(aws_region,cluster_id,meta_base):
+    ip_type = "PrivateIpAddress"
+    for base in meta_base:
+        if base["cluster_id"] == cluster_id:
+            ip_type = base["ip_type"]
+            break
     emr_client = boto3.client('emr',region_name=aws_region)
     response = emr_client.describe_cluster(
         ClusterId=cluster_id
@@ -66,7 +71,7 @@ def get_untaged_instances(aws_region,cluster_id):
                 'RUNNING'
             ],
         )
-        untaged_list.extend(filter_instance(aws_region,emr_response))
+        untaged_list.extend(filter_instance(aws_region,emr_response,ip_type))
 
     if response["Cluster"]["InstanceCollectionType"] == "INSTANCE_FLEET":
         emr_response_task = emr_client.list_instances(
@@ -76,7 +81,7 @@ def get_untaged_instances(aws_region,cluster_id):
                 'RUNNING'
             ],
         )
-        untaged_list.extend(filter_instance(aws_region,emr_response_task))
+        untaged_list.extend(filter_instance(aws_region,emr_response_task,ip_type))
         emr_response_core = emr_client.list_instances(
             ClusterId=cluster_id,
             InstanceFleetType='CORE',
@@ -84,16 +89,16 @@ def get_untaged_instances(aws_region,cluster_id):
                 'RUNNING'
             ],
         )
-        untaged_list.extend(filter_instance(aws_region,emr_response_core))
+        untaged_list.extend(filter_instance(aws_region,emr_response_core,ip_type))
     return list(set(untaged_list))
 
 
-def filter_instance(aws_region,emr_instances):
+def filter_instance(aws_region,emr_instances,ip_type):
     ec2_client = boto3.client('ec2',region_name=aws_region)
     ins_list = []
     ins_dict = {}
     for ins in emr_instances["Instances"]:
-        pubIP = ins["PublicIpAddress"]
+        pubIP = ins[ip_type]
         ec2ID = ins["Ec2InstanceId"]
         # ins["PrivateIpAddress"]
         ins_list.append(ec2ID)
@@ -136,7 +141,8 @@ def process_msg(meta,private_key_path):
             time.sleep(15)
     while 1:
         # print("wait message")
-        for message in queue.receive_messages(AttributeNames=["All"],MaxNumberOfMessages=3, WaitTimeSeconds=5):
+        # VisibilityTimeout 1800s
+        for message in queue.receive_messages(AttributeNames=["All"],MaxNumberOfMessages=3,VisibilityTimeout=1800, WaitTimeSeconds=5):
             # Get the custom author message attribute if it was set
             try:
                 print(message.body)
