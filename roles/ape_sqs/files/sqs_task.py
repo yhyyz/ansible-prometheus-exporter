@@ -36,7 +36,8 @@ def event_handler(aws_region,event,meta_base,private_key_path,project_path):
             else:
                 print("ansible install exporter error")
         else:
-            print("ERM State Change resize not complete.")
+            print("ERM State Change resize not complete, ignore  msg")
+            is_ok = True
     except Exception as error:
         print("ape run error: ", error)
         # traceback.print_exc()
@@ -142,9 +143,9 @@ def process_msg(meta,private_key_path):
             print("queue is not  ok, after 15s retry ... ", error)
             time.sleep(15)
     while 1:
-        # print("wait message")
+        print("wait message")
         # VisibilityTimeout 1800s
-        for message in queue.receive_messages(AttributeNames=["All"],MaxNumberOfMessages=3,VisibilityTimeout=1800, WaitTimeSeconds=5):
+        for message in queue.receive_messages(AttributeNames=["All"],MaxNumberOfMessages=3,VisibilityTimeout=600, WaitTimeSeconds=10):
             # Get the custom author message attribute if it was set
             try:
                 print(message.body)
